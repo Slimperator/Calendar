@@ -1,0 +1,4 @@
+com\Calendar\DataBaseConnector\AccountsConnector.class
+com\Calendar\Main.class
+com\Calendar\DataBaseConnector\IDBConnector.class
+com\Calendar\DataBaseConnector\CalendarConnector.class

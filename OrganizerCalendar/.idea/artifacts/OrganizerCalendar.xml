@@ -1,0 +1,8 @@
+<component name="ArtifactManager">
+  <artifact type="exploded-ear" name="OrganizerCalendar">
+    <output-path>$PROJECT_DIR$/out/artifacts/OrganizerCalendar</output-path>
+    <root id="root">
+      <element id="javaee-facet-resources" facet="OrganizerCalendar/javaeeApplication/javaEEApplication" />
+    </root>
+  </artifact>
+</component>
