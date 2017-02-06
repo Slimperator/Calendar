@@ -16,7 +16,7 @@ public class CalendarConnector implements IDBConnector{
     }
 
     @Override
-    public ArrayList<String> getNotes() {
+    public ArrayList<String> getNotes(ArrayList<String> params) {
         return null;
     }
 
