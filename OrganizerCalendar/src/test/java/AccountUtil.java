@@ -5,7 +5,7 @@ import com.Calendar.Server.DataBaseConnector.entity.Accounts;
 public class AccountUtil {
     public static Accounts createAccounts()
     {
-        Accounts acc = new Accounts("azazaza","olololo" );
+        Accounts acc = new Accounts("asdas","olosdfslolo" );
         return acc;
     }
 }

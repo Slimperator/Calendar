@@ -23,7 +23,7 @@ public class SimpleController {
                                                          HttpServletResponse response) throws ServletException, IOException {
 
         OrderConfirmation confirmation = new OrderConfirmation();
-        confirmation.message = "HELLO MOTHEFACKER";
+        confirmation.message = "HELLO MOTHERFACKER";
         confirmation.ready_time = System.currentTimeMillis() + 1000 * 60 * 30;
         return confirmation;
     }
