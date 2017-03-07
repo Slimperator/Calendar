@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<module rename-to='calendargwt'>
+    <!-- Inherit the core Web Toolkit stuff. -->
+    <inherits name='com.google.gwt.user.User'/>
+    <inherits name='org.fusesource.restygwt.RestyGWT' />
+    <inherits name='com.google.gwt.user.theme.standard.Standard' />
+
+    <!-- Specify the app entry point class. -->
+    <entry-point class='com.Calendar.Client.CalendarGWT'/>
+
+    <!-- Specify the paths for translatable code -->
+    <source path='Client' />
+    <source path='shared' />
+</module>
