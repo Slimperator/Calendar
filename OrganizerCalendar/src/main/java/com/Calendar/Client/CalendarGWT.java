@@ -19,14 +19,25 @@ public class CalendarGWT implements EntryPoint {
             public void onClick(ClickEvent event) {
                 InfoService.Util.getService().getInfo(new MethodCallback<OrderConfirmation>() {
                     @Override
-                    public void onSuccess(Method method, OrderConfirmation response) {
-                        RootPanel.get().add(new Label(response.toString()));
-                    }
-                    @Override
-                    public void onFailure(Method method, Throwable exception) {
+                    public void onFailure(Method method, Throwable throwable) {
                         GWT.log("Error");
                     }
+
+                    @Override
+                    public void onSuccess(Method method, OrderConfirmation orderConfirmation) {
+
+                    }
                 });
+//                InfoService.Util.getService().getInfo(new MethodCallback<OrderConfirmation>() {
+//                    @Override
+//                    public void onSuccess(Method method, OrderConfirmation response) {
+//                        RootPanel.get().add(new Label(response.toString()));
+//                    }
+//                    @Override
+//                    public void onFailure(Method method, Throwable exception) {
+//                        GWT.log("Error");
+//                    }
+//                });
             }
         });
         RootPanel.get().add(button);
