@@ -6,10 +6,8 @@ import org.fusesource.restygwt.client.MethodCallback;
 import org.fusesource.restygwt.client.Resource;
 import org.fusesource.restygwt.client.RestService;
 import org.fusesource.restygwt.client.RestServiceProxy;
-import javax.ws.rs.Consumes;
-import javax.ws.rs.GET;
-import javax.ws.rs.Path;
-import javax.ws.rs.Produces;
+
+import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
 
 /**
@@ -28,9 +26,27 @@ public interface InfoService extends RestService {
             return instance;
         }
     }
-    @GET
-    @Path("/loadInfo")
+    @POST
+    @Path("/session")
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
     public void getInfo(MethodCallback<OrderConfirmation> callback);
+
+    @GET
+    @Path("/session")
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Produces(MediaType.APPLICATION_JSON)
+    public void truegetInfo(MethodCallback<OrderConfirmation> callback);
+
+    @PUT
+    @Path("/session")
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Produces(MediaType.APPLICATION_JSON)
+    public void putInfo(MethodCallback<OrderConfirmation> callback);
+
+    @DELETE
+    @Path("/session")
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Produces(MediaType.APPLICATION_JSON)
+    public void deleteInfo(MethodCallback<OrderConfirmation> callback);
 }
