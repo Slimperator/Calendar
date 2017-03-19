@@ -27,14 +27,14 @@ import java.util.Properties;
         "com.Calendar.Server.DataBaseConnector.repository")
 public class DataBaseConfig {
 
-    private static final String PROP_DATABASE_DRIVER = "DB.driver";
-    private static final String PROP_DATABASE_PASSWORD = "DB.password";
-    private static final String PROP_DATABASE_URL = "DB.url";
-    private static final String PROP_DATABASE_USERNAME = "DB.username";
-    private static final String PROP_HIBERNATE_DIALECT = "DB.hibernate.dialect";
-    private static final String PROP_HIBERNATE_SHOW_SQL = "DB.hibernate.show_sql";
-    private static final String PROP_ENTITYMANAGER_PACKAGES_TO_SCAN = "DB.entitymanager.packages.to.scan";
-    private static final String PROP_HIBERNATE_HBM2DDL_AUTO = "DB.hibernate.hbm2ddl.auto";
+    private static final String PROP_DATABASE_DRIVER = "driver";
+    private static final String PROP_DATABASE_PASSWORD = "password";
+    private static final String PROP_DATABASE_URL = "url";
+    private static final String PROP_DATABASE_USERNAME = "username";
+    private static final String PROP_HIBERNATE_DIALECT = "hibernate.dialect";
+    private static final String PROP_HIBERNATE_SHOW_SQL = "hibernate.show_sql";
+    private static final String PROP_ENTITYMANAGER_PACKAGES_TO_SCAN = "entitymanager.packages.to.scan";
+    private static final String PROP_HIBERNATE_HBM2DDL_AUTO = "hibernate.hbm2ddl.auto";
 
     @Resource
     private Environment env;
