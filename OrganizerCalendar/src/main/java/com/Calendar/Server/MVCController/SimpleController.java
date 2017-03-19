@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.ws.rs.Path;
 import java.io.IOException;
 import java.io.PrintWriter;
 
@@ -18,8 +19,18 @@ import java.io.PrintWriter;
  */
 @Controller
 public class SimpleController {
-    @RequestMapping(value = "/loadInfo", method = RequestMethod.GET, headers = "Accept=application/json")
+    @RequestMapping(value = "/session", method = RequestMethod.POST, headers = "Accept=application/json")
     public @ResponseBody OrderConfirmation handleRequest(HttpServletRequest request,
+                                                         HttpServletResponse response) throws ServletException, IOException {
+
+        OrderConfirmation confirmation = new OrderConfirmation();
+        confirmation.message = "HELLO MOTHERFACKER";
+        confirmation.ready_time = System.currentTimeMillis() + 1000 * 60 * 30;
+        return confirmation;
+    }
+
+    @RequestMapping(value = "/data", method = RequestMethod.GET, headers = "Accept=application/json")
+    public @ResponseBody OrderConfirmation GetRequest(HttpServletRequest request,
                                                          HttpServletResponse response) throws ServletException, IOException {
 
         OrderConfirmation confirmation = new OrderConfirmation();
