@@ -10,7 +10,7 @@ public class Tools {
     {
         return MD5Generator(password).equals(MD5Generator(input)) ? true : false;
     }
-    private static String MD5Generator(String string)
+    public static String MD5Generator(String string)
     {
         MessageDigest messageDigest = null;
         byte[] digest = new byte[0];
