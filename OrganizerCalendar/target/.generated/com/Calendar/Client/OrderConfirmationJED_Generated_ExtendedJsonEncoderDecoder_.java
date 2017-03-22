@@ -1,4 +1,0 @@
-package com.Calendar.Client;
-
-public class OrderConfirmationJED_Generated_ExtendedJsonEncoderDecoder_ extends com.Calendar.Client.OrderConfirmation_Generated_JsonEncoderDecoder_ implements com.Calendar.Client.OrderConfirmation.OrderConfirmationJED {
-}
