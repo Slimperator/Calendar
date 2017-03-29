@@ -1,4 +1,4 @@
-package com.Calendar.Client.json;
+package com.calendar.client.json;
 
 import com.google.gwt.core.client.GWT;
 import org.fusesource.restygwt.client.JsonEncoderDecoder;

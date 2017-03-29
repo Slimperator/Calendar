@@ -7,9 +7,9 @@
     <inherits name='com.google.gwt.user.theme.standard.Standard' />
 
     <!-- Specify the app entry point class. -->
-    <entry-point class='com.Calendar.Client.CalendarGWT'/>
+    <entry-point class='com.calendar.client.CalendarGWT'/>
 
     <!-- Specify the paths for translatable code -->
-    <source path='Client' />
+    <source path='client' />
     <source path='shared' />
 </module>

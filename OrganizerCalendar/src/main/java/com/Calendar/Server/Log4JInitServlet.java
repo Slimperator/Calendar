@@ -1,4 +1,4 @@
-package com.Calendar.Server;
+package com.calendar.server;
 
 /**
  * Created by Владимир on 07.03.2017.

@@ -1,10 +1,10 @@
-package com.Calendar.Server.DataBaseConnector.repository;
+package com.calendar.server.databaseconnector.repository;
 
-import com.Calendar.Server.DataBaseConnector.entity.Accounts;
+import com.calendar.server.databaseconnector.entity.Accounts;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
-import org.springframework.stereotype.Repository;
+
 /**
  * Created by Владимир on 12.02.2017.
  */

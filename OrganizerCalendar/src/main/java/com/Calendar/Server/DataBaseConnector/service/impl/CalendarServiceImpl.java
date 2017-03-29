@@ -1,8 +1,8 @@
-package com.Calendar.Server.DataBaseConnector.service.impl;
+package com.calendar.server.databaseconnector.service.impl;
 
-import com.Calendar.Server.DataBaseConnector.entity.Calendar;
-import com.Calendar.Server.DataBaseConnector.repository.CalendarRepository;
-import com.Calendar.Server.DataBaseConnector.service.CalendarService;
+import com.calendar.server.databaseconnector.entity.Calendar;
+import com.calendar.server.databaseconnector.repository.CalendarRepository;
+import com.calendar.server.databaseconnector.service.CalendarService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import java.sql.Date;

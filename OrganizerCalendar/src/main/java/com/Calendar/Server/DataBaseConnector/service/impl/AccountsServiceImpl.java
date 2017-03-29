@@ -1,8 +1,8 @@
-package com.Calendar.Server.DataBaseConnector.service.impl;
+package com.calendar.server.databaseconnector.service.impl;
 
-import com.Calendar.Server.DataBaseConnector.entity.Accounts;
-import com.Calendar.Server.DataBaseConnector.repository.AccountsRepository;
-import com.Calendar.Server.DataBaseConnector.service.AccountsService;
+import com.calendar.server.databaseconnector.entity.Accounts;
+import com.calendar.server.databaseconnector.repository.AccountsRepository;
+import com.calendar.server.databaseconnector.service.AccountsService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 /**

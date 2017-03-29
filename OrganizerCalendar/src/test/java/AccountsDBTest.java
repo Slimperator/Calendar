@@ -5,7 +5,7 @@ import javax.annotation.Resource;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 
-import com.Calendar.Server.DataBaseConnector.service.AccountsService;
+import com.calendar.server.databaseconnector.service.AccountsService;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -14,7 +14,7 @@ import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.web.WebAppConfiguration;
-import com.Calendar.Server.DataBaseConnector.config.DataBaseConfig;
+import com.calendar.server.databaseconnector.config.DataBaseConfig;
 
 @DirtiesContext
 @RunWith(SpringJUnit4ClassRunner.class)

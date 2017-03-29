@@ -1,4 +1,4 @@
-package com.Calendar.Server.DataBaseConnector.config;
+package com.calendar.server.databaseconnector.config;
 
 /**
  * Created by Владимир on 11.02.2017.
@@ -21,10 +21,10 @@ import java.util.Properties;
 
 @Configuration
 @EnableTransactionManagement
-@ComponentScan("com.Calendar.Server")
+@ComponentScan("com.calendar.server")
 @PropertySource("classpath:app.properties")
 @EnableJpaRepositories(
-        "com.Calendar.Server.DataBaseConnector.repository")
+        "com.calendar.server.databaseconnector.repository")
 public class DataBaseConfig {
 
     private static final String PROP_DATABASE_DRIVER = "driver";

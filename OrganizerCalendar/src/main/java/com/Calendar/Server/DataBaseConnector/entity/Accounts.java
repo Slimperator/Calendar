@@ -1,4 +1,4 @@
-package com.Calendar.Server.DataBaseConnector.entity;
+package com.calendar.server.databaseconnector.entity;
 
 import org.hibernate.annotations.GenericGenerator;
 

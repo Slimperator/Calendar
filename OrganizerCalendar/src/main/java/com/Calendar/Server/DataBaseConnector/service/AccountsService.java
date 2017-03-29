@@ -1,6 +1,6 @@
-package com.Calendar.Server.DataBaseConnector.service;
+package com.calendar.server.databaseconnector.service;
 
-import com.Calendar.Server.DataBaseConnector.entity.Accounts;
+import com.calendar.server.databaseconnector.entity.Accounts;
 
 /**
  * Created by Владимир on 12.02.2017.

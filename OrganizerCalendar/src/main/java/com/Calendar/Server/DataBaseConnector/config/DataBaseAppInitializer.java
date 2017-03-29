@@ -1,4 +1,4 @@
-package com.Calendar.Server.DataBaseConnector.config;
+package com.calendar.server.databaseconnector.config;
 
 /**
  * Created by Владимир on 11.02.2017.

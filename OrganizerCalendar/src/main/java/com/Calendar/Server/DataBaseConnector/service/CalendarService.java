@@ -1,6 +1,6 @@
-package com.Calendar.Server.DataBaseConnector.service;
+package com.calendar.server.databaseconnector.service;
 
-import com.Calendar.Server.DataBaseConnector.entity.Calendar;
+import com.calendar.server.databaseconnector.entity.Calendar;
 
 import java.sql.Date;
 import java.util.List;
