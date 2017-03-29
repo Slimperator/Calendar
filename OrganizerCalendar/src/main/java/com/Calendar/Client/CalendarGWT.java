@@ -1,6 +1,6 @@
-package com.Calendar.Client;
+package com.calendar.client;
 
-import com.Calendar.Client.json.EventConfirmation;
+import com.calendar.client.json.EventConfirmation;
 import com.google.gwt.core.client.EntryPoint;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.dom.client.Style;
@@ -23,7 +23,7 @@ public class CalendarGWT implements EntryPoint {
     public void onModuleLoad() {
         Button button = new Button("Click Me");
         button.setSize("300", "100");
-        button.addClickHandler(new ClickHandler() {
+        /*button.addClickHandler(new ClickHandler() {
             @Override
             public void onClick(ClickEvent event) {
                 InfoService.Util.getService().createEvent(new MethodCallback<EventConfirmation>() {
@@ -38,7 +38,7 @@ public class CalendarGWT implements EntryPoint {
                     }
                 });
             }
-        });
+        });*/
 
         StackLayoutPanel f = new StackLayoutPanel(Style.Unit.EM);
         f.add(new HTML("Event 1"), new HTML("Hello"), 4);
