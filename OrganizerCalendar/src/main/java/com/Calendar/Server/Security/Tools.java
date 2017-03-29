@@ -1,10 +1,13 @@
-package com.Calendar.Server.Security;
+package com.calendar.server.security;
+import org.springframework.stereotype.Service;
+
 import java.math.BigInteger;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 /**
  * Created by Владимир on 06.02.2017.
  */
+@Service
 public class Tools {
     public static boolean passwordHashEquals(String password, String input)
     {
