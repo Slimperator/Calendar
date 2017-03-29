@@ -1,7 +1,7 @@
-package com.Calendar.Client;
+package com.calendar.client;
 
-import com.Calendar.Client.json.AccountConfirmation;
-import com.Calendar.Client.json.EventConfirmation;
+import com.calendar.client.json.AccountConfirmation;
+import com.calendar.client.json.EventConfirmation;
 import com.google.gwt.core.client.GWT;
 import org.fusesource.restygwt.client.MethodCallback;
 import org.fusesource.restygwt.client.Resource;
@@ -31,53 +31,53 @@ public interface InfoService extends RestService {
     @Path("/account")
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
-    public void editAccount(MethodCallback<AccountConfirmation> callback);
+    public void editAccount(AccountConfirmation request, MethodCallback<AccountConfirmation> callback);
 
     @GET
     @Path("/account")
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
-    public void getAccount(MethodCallback<AccountConfirmation> callback);
+    public void getAccount(AccountConfirmation request, MethodCallback<AccountConfirmation> callback);
 
     @POST
     @Path("/newAccount")
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
-    public void createAccount(MethodCallback<AccountConfirmation> callback);
+    public void createAccount(AccountConfirmation request, MethodCallback<AccountConfirmation> callback);
 
     @DELETE
     @Path("/account")
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
-    public void deleteAccount(MethodCallback<AccountConfirmation> callback);
+    public void deleteAccount(AccountConfirmation request, MethodCallback<AccountConfirmation> callback);
 
     @POST
     @Path("/event")
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
-    public void editEvent(MethodCallback<EventConfirmation> callback);
+    public void editEvent(EventConfirmation request, MethodCallback<EventConfirmation> callback);
 
     @GET
     @Path("/event")
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
-    public void getEvent(MethodCallback<EventConfirmation> callback);
+    public void getEvent(EventConfirmation request, MethodCallback<EventConfirmation> callback);
 
     @GET
     @Path("/eventsByRange")
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
-    public void getEventsByRange(MethodCallback<EventConfirmation> callback);
+    public void getEventsByRange(EventConfirmation request, MethodCallback<EventConfirmation> callback);
 
     @POST
     @Path("/newEvent")
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
-    public void createEvent(MethodCallback<EventConfirmation> callback);
+    public void createEvent(EventConfirmation request, MethodCallback<EventConfirmation> callback);
 
     @DELETE
     @Path("/event")
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
-    public void deleteEvent(MethodCallback<EventConfirmation> callback);
+    public void deleteEvent(EventConfirmation request, MethodCallback<EventConfirmation> callback);
 }
