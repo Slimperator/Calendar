@@ -12,9 +12,10 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 
-@Service
+@Component
 public class CustomAuthenticationProvider implements AuthenticationProvider {
     @Autowired
     private UserDetailsServiceImpl userDetailsService;
@@ -29,8 +30,7 @@ public class CustomAuthenticationProvider implements AuthenticationProvider {
         UserDetails store = userDetailsService.loadUserByUsername(username);
         if (!store.getPassword().equals(password))
             throw new BadCredentialsException("invalid password");
-        Authentication customAuthentication = new CustomUserAuthentication(
-                "ROLE_USER", authentication);
+        Authentication customAuthentication = new UsernamePasswordAuthenticationToken(username, password, store.getAuthorities());
         customAuthentication.setAuthenticated(true);
         return customAuthentication;
     }

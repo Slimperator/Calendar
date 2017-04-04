@@ -34,8 +34,4 @@ public class UserDetailsServiceImpl implements UserDetailsService {
                         roles);
         return userDetails;
     }
-    @Bean
-    public UserDetailsService getUserDetailsService(){
-        return new UserDetailsServiceImpl();
-    }
 }

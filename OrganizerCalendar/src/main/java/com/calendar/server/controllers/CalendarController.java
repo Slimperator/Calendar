@@ -218,7 +218,7 @@ public class CalendarController {
         }
     }
 
-    @RequestMapping(value = "/login", method = RequestMethod.POST, headers = "Accept=application/json")
+    @RequestMapping(value = "/logout", method = RequestMethod.POST, headers = "Accept=application/json")
     public @ResponseBody
     String authorisationOn(@RequestBody LoginConfirmation lg) throws ServletException, IOException {
         Authentication authentication = SecurityContextHolder.getContext()

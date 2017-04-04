@@ -5,12 +5,14 @@ import com.calendar.server.security.spring.impl.UserDetailsServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.authentication.encoding.Md5PasswordEncoder;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
+import org.springframework.security.core.userdetails.UserDetailsService;
 
 /**
  * Created by Владимир on 29.03.2017.
@@ -49,11 +51,11 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
         http.formLogin()
                 // указываем страницу с формой логина
-                .loginPage("/Calendar.html")
+                .loginPage("/login")
                 // указываем action с формы логина
                 //.loginProcessingUrl("/j_spring_security_check")
                 // указываем URL при неудачном логине
-                //.failureUrl("/login?error")
+                .failureUrl("/login")
                 //.successForwardUrl("/Calendar.html")
                 // даем доступ к форме логина всем
                 .permitAll()
@@ -64,8 +66,16 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 // указываем URL логаута
                 //.logoutUrl("/logout")
                 // указываем URL при удачном логауте
-                //.logoutSuccessUrl("/login?logout")
+                .logoutSuccessUrl("/login")
                 // делаем не валидной текущую сессию
                 .invalidateHttpSession(true);
+    }
+    @Bean
+    public UserDetailsService getUserDetailsService(){
+        return new UserDetailsServiceImpl();
+    }
+    @Bean
+    public AuthenticationProvider getAuthenticationProvider(){
+        return new CustomAuthenticationProvider();
     }
 }

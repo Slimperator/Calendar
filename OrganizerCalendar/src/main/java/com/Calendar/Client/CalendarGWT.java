@@ -96,7 +96,7 @@ public class CalendarGWT implements EntryPoint {
         LoginConfirmation lg = new LoginConfirmation();
         lg.login = "asda";
         lg.password = "asd";
-        InfoService.Util.getService().login(lg, new MethodCallback<String>() {
+        InfoService.Util.getService().logout(new MethodCallback<String>() {
             @Override
             public void onFailure(Method method, Throwable throwable) {
 

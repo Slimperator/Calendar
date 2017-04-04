@@ -82,8 +82,8 @@ public interface InfoService extends RestService {
     public void deleteEvent(String eventName, MethodCallback<EventConfirmation> callback);
 
     @POST
-    @Path("/login")
+    @Path("/logout")
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
-    public void login(LoginConfirmation loginConfirmation, MethodCallback<String> callback);
+    public void logout(MethodCallback<String> callback);
 }
