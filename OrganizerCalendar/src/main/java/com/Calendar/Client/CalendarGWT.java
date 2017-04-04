@@ -1,14 +1,12 @@
 package com.calendar.client;
 
-import com.calendar.client.json.EventConfirmation;
+import com.calendar.client.json.LoginConfirmation;
 import com.google.gwt.core.client.EntryPoint;
-import com.google.gwt.core.client.GWT;
 import com.google.gwt.dom.client.Style;
-import com.google.gwt.event.dom.client.ClickEvent;
-import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.event.logical.shared.ValueChangeEvent;
 import com.google.gwt.event.logical.shared.ValueChangeHandler;
 import com.google.gwt.i18n.client.DateTimeFormat;
+import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.*;
 import com.google.gwt.user.datepicker.client.DatePicker;
 import org.fusesource.restygwt.client.Method;
@@ -95,5 +93,19 @@ public class CalendarGWT implements EntryPoint {
         p.add(f);
         RootLayoutPanel rp = RootLayoutPanel.get();
         rp.add(p);
+        LoginConfirmation lg = new LoginConfirmation();
+        lg.login = "asda";
+        lg.password = "asd";
+        InfoService.Util.getService().login(lg, new MethodCallback<String>() {
+            @Override
+            public void onFailure(Method method, Throwable throwable) {
+
+            }
+
+            @Override
+            public void onSuccess(Method method, String s) {
+                Window.alert("s");
+            }
+        });
     }
 }
