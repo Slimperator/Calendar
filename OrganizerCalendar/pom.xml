@@ -4,7 +4,7 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
-    <groupId>com.Calendar</groupId>
+    <groupId>com.calendar</groupId>
     <artifactId>OrganizerCalendar</artifactId>
     <name>OrganizerCalendar</name>
     <version>1.0-SNAPSHOT</version>
@@ -24,7 +24,7 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <jackson.version>2.7.3</jackson.version>
         <webappDirectory>${project.build.directory}\${project.build.finalName}</webappDirectory>
-        <spring.securiry>4.2.2.RELEASE</spring.securiry>
+        <spring.securiry>3.2.0.RELEASE</spring.securiry>
     </properties>
 
     <dependencies>
