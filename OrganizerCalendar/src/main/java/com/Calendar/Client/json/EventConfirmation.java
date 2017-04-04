@@ -1,6 +1,5 @@
 package com.calendar.client.json;
 
-import com.google.gwt.core.client.GWT;
 import org.fusesource.restygwt.client.JsonEncoderDecoder;
 
 import java.util.List;
@@ -16,19 +15,41 @@ public class EventConfirmation {
     public String beginDate;
     public String endDate;
     public String account;
-    public List<String> events;
     /**
      * Example of how to create an instance of a JsonEncoderDecoder for a data
      * transfer object.
      */
-    public interface EventConfirmationJED extends JsonEncoderDecoder<EventConfirmation> {
-    }
-    @Override
+    /*@Override
     public String toString() {
-        if (GWT.isClient()) {
-            EventConfirmationJED jed = GWT.create(EventConfirmationJED.class);
-            return jed.encode(this).toString();
+        return success + "," + name + "," + newName + "," + description + "," + beginDate + endDate + account + events;
+    }
+
+    /**
+     * Example of how to create an instance of a JsonEncoderDecoder for a data
+     * transfer object.
+
+
+    public static AccountConfirmation fromString(String string)
+    {
+        AccountConfirmation ac = null;
+        try {
+            ac = new AccountConfirmation();
+            String[] split = string.split(",");
+            ac.success = split[0];
+            ac.name = split[1];
+            ac.login = split[2];
+            ac.newPassword = split[3];
+            ac.someOtherShitAboutYou = split[4];
         }
-        return super.toString();
+        catch (ArrayIndexOutOfBoundsException e)
+        {
+            System.out.println("wrong str format");
+        }
+        finally {
+            return ac;
+        }
+    }*/
+
+    public interface EventConfirmationJED extends JsonEncoderDecoder<EventConfirmation> {
     }
 }
