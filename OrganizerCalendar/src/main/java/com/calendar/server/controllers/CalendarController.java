@@ -2,20 +2,28 @@ package com.calendar.server.controllers;
 
 import com.calendar.client.json.AccountConfirmation;
 import com.calendar.client.json.EventConfirmation;
+import com.calendar.client.json.LoginConfirmation;
 import com.calendar.server.databaseconnector.entity.Accounts;
 import com.calendar.server.databaseconnector.entity.Calendar;
 import com.calendar.server.databaseconnector.service.AccountsService;
 import com.calendar.server.databaseconnector.service.CalendarService;
 import com.calendar.server.databaseconnector.service.impl.AccountsServiceImpl;
 import com.calendar.server.databaseconnector.service.impl.CalendarServiceImpl;
+import com.calendar.server.security.spring.impl.UserDetailsServiceImpl;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.ServletException;
+import javax.ws.rs.PathParam;
+import java.awt.*;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -23,12 +31,16 @@ import java.util.List;
  */
 @Controller
 public class CalendarController {
-    private AccountsService accountsService = new AccountsServiceImpl();
-    private CalendarService calendarService = new CalendarServiceImpl();
-
-    @RequestMapping(value = "/newAccount", method = RequestMethod.POST, headers = "Accept=application/json")
+    @Autowired
+    private AccountsService accountsService;
+    @Autowired
+    private CalendarService calendarService;
+    @Autowired
+    private UserDetailsServiceImpl userDetailsService;
+    //check!
+    @RequestMapping(value = "/auth/newAccount", method = RequestMethod.POST, headers = "Accept=application/json")
     public @ResponseBody
-    AccountConfirmation newAccountRequest(AccountConfirmation request) throws ServletException, IOException {
+    AccountConfirmation newAccountRequest(@RequestBody AccountConfirmation request) throws ServletException, IOException {
         AccountConfirmation confirmation = request;
         try {
             accountsService.addAccount(new Accounts(confirmation.login, confirmation.newPassword));
@@ -41,11 +53,12 @@ public class CalendarController {
             return confirmation;
         }
     }
-
-    @RequestMapping(value = "/account", method = RequestMethod.DELETE, headers = "Accept=application/json")
+    //Check!
+    @RequestMapping(value = "/auth/account", method = RequestMethod.DELETE, headers = "Accept=application/json")
     public @ResponseBody
-    AccountConfirmation deleteAccountRequest(AccountConfirmation request) throws ServletException, IOException {
-        AccountConfirmation confirmation = request;
+    AccountConfirmation deleteAccountRequest(@RequestBody String login) throws ServletException, IOException {
+        AccountConfirmation confirmation = new AccountConfirmation();
+        confirmation.login = login;
         try {
             accountsService.deleteAccount(confirmation.login);
             confirmation.success = "ok";
@@ -57,10 +70,10 @@ public class CalendarController {
             return confirmation;
         }
     }
-
-    @RequestMapping(value = "/account", method = RequestMethod.POST, headers = "Accept=application/json")
+    //Check!
+    @RequestMapping(value = "/auth/account", method = RequestMethod.POST, headers = "Accept=application/json")
     public @ResponseBody
-    AccountConfirmation editAccountRequest(AccountConfirmation request) throws ServletException, IOException {
+    AccountConfirmation editAccountRequest(@RequestBody AccountConfirmation request) throws ServletException, IOException {
         AccountConfirmation confirmation = request;
         try {
             Accounts account = accountsService.getAccount(com.calendar.server.security.Tools.MD5Generator(confirmation.login));
@@ -75,11 +88,12 @@ public class CalendarController {
             return confirmation;
         }
     }
-
-    @RequestMapping(value = "/account", method = RequestMethod.GET, headers = "Accept=application/json")
+    //FAIL!
+    @RequestMapping(value = "/auth/account/{request}", method = RequestMethod.GET, headers = "Accept=application/json")
     public @ResponseBody
-    AccountConfirmation getAccountRequest(AccountConfirmation request) throws ServletException, IOException {
-        AccountConfirmation confirmation = request;
+    AccountConfirmation getAccountRequest(@RequestParam("request")String login) throws ServletException, IOException {
+        AccountConfirmation confirmation = new AccountConfirmation();
+        confirmation.login = login;
         try {
             Accounts account = accountsService.getAccount(com.calendar.server.security.Tools.MD5Generator(confirmation.login));
             confirmation.success = "ok";
@@ -91,10 +105,10 @@ public class CalendarController {
             return confirmation;
         }
     }
-
-    @RequestMapping(value = "/newEvent", method = RequestMethod.POST, headers = "Accept=application/json")
+    //Check!
+    @RequestMapping(value = "/auth/newEvent", method = RequestMethod.POST, headers = "Accept=application/json")
     public @ResponseBody
-    EventConfirmation createEventRequest(EventConfirmation request) throws ServletException, IOException {
+    EventConfirmation createEventRequest(@RequestBody EventConfirmation request) throws ServletException, IOException {
         EventConfirmation confirmation = request;
         try {
             SimpleDateFormat df = new SimpleDateFormat("yyyyMMdd");
@@ -115,10 +129,10 @@ public class CalendarController {
             return confirmation;
         }
     }
-
-    @RequestMapping(value = "/event", method = RequestMethod.POST, headers = "Accept=application/json")
+    //Check!
+    @RequestMapping(value = "/auth/event", method = RequestMethod.POST, headers = "Accept=application/json")
     public @ResponseBody
-    EventConfirmation editEventRequest(EventConfirmation request) throws ServletException, IOException {
+    EventConfirmation editEventRequest(@RequestBody EventConfirmation request) throws ServletException, IOException {
         EventConfirmation confirmation = request;
         try {
             SimpleDateFormat df = new SimpleDateFormat("yyyyMMdd");
@@ -138,33 +152,39 @@ public class CalendarController {
             return confirmation;
         }
     }
-
-    @RequestMapping(value = "/eventsByRange", method = RequestMethod.GET, headers = "Accept=application/json")
+    //Add search for account
+    @RequestMapping(value = "/auth/eventsByRange", method = RequestMethod.GET, headers = "Accept=application/json")
     public @ResponseBody
-    EventConfirmation getEventByDateRequest(EventConfirmation request) throws ServletException, IOException {
+    List<EventConfirmation> getEventByDateRequest(EventConfirmation request) throws ServletException, IOException {
         EventConfirmation confirmation = request;
+        List<EventConfirmation> response = new ArrayList<EventConfirmation>();
         try {
             SimpleDateFormat df = new SimpleDateFormat("yyyyMMdd");
             List<Calendar> events = calendarService.getEventsByRange(new java.sql.Date(df.parse(confirmation.beginDate).getTime()),
                     new java.sql.Date(df.parse(confirmation.endDate).getTime()));
-            for(Calendar calendar: events)
+            for(Calendar event: events)
             {   //Настроить тустринг и продумать схему хранения на клиенте
-                confirmation.events.add(calendar.toString());
+                EventConfirmation element = new EventConfirmation();
+                element.description = event.getDescription();
+                element.beginDate = df.format(event.getBegin_data());
+                element.endDate = df.format(event.getEnd_data());
+                element.name = event.getName();
+                response.add(element);
             }
-            confirmation.success = "ok";
         }
         catch (Exception e){
             confirmation.success = "false";
         }
         finally {
-            return confirmation;
+            return response;
         }
     }
-
-    @RequestMapping(value = "/event", method = RequestMethod.DELETE, headers = "Accept=application/json")
+    //Check!
+    @RequestMapping(value = "/auth/event", method = RequestMethod.DELETE, headers = "Accept=application/json")
     public @ResponseBody
-    EventConfirmation deleteEventRequest(EventConfirmation request) throws ServletException, IOException {
-        EventConfirmation confirmation = request;
+    EventConfirmation deleteEventRequest(@RequestBody String eventName) throws ServletException, IOException {
+        EventConfirmation confirmation = new EventConfirmation();
+        confirmation.name = eventName;
         try {
             calendarService.deleteEvent(calendarService.getEvent(confirmation.name));
             confirmation.success = "ok";
@@ -176,14 +196,14 @@ public class CalendarController {
             return confirmation;
         }
     }
-
-    @RequestMapping(value = "/event", method = RequestMethod.GET, headers = "Accept=application/json")
+    //Somthing wrong
+    @RequestMapping(value = "/auth/event/{eventName}", method = RequestMethod.GET, headers = "Accept=application/json")
     public @ResponseBody
-    EventConfirmation getEvent(EventConfirmation request) throws ServletException, IOException {
-        EventConfirmation confirmation = request;
+    EventConfirmation getEvent(@RequestParam("eventName") String eventName) throws ServletException, IOException {
+        EventConfirmation confirmation = new EventConfirmation();
         try {
             SimpleDateFormat df = new SimpleDateFormat("yyyyMMdd");
-            Calendar event = calendarService.getEvent(confirmation.name);
+            Calendar event = calendarService.getEvent(eventName);
             confirmation.description = event.getDescription();
             confirmation.beginDate = df.format(event.getBegin_data());
             confirmation.endDate = df.format(event.getEnd_data());
@@ -195,6 +215,19 @@ public class CalendarController {
         }
         finally {
             return confirmation;
+        }
+    }
+
+    @RequestMapping(value = "/login", method = RequestMethod.POST, headers = "Accept=application/json")
+    public @ResponseBody
+    String authorisationOn(@RequestBody LoginConfirmation lg) throws ServletException, IOException {
+        Authentication authentication = SecurityContextHolder.getContext()
+                .getAuthentication();
+        if (authentication == null) {
+            System.out.println("Not logged in");
+            return null;
+        } else {
+            return (String) authentication.getPrincipal();
         }
     }
 }
