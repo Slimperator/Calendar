@@ -17,8 +17,8 @@ public class Calendar {
     private Integer id;
 
     @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
-    @JoinColumn(name = "account_id", nullable = false)
-    private Accounts account_id;
+    @JoinColumn(name = "account_creator", nullable = false)
+    private Accounts account_creator;
 
     @Column(name = "name", nullable = false)
     private String name;
@@ -32,13 +32,16 @@ public class Calendar {
     @Column(name = "end_data", nullable = false)
     private Date end_data;
 
-    public Calendar(String name, String description, Date begin_data, Date end_data, Accounts account_id)
+    public Calendar()
+    {}
+
+    public Calendar(String name, String description, Date begin_data, Date end_data, Accounts account_creator)
     {
         this.name = name;
         this.description = description;
         this.begin_data = begin_data;
         this.end_data = end_data;
-        this.account_id = account_id;
+        this.account_creator = account_creator;
     }
 
     public Integer getId() {
@@ -49,12 +52,12 @@ public class Calendar {
         this.id = id;
     }
 
-    public Accounts getAccount_id() {
-        return account_id;
+    public Accounts getAccount_creator() {
+        return account_creator;
     }
 
-    public void setAccount_id(Accounts account_id) {
-        this.account_id = account_id;
+    public void setAccount_creator(Accounts account_creator) {
+        this.account_creator = account_creator;
     }
 
     public String getName() {

@@ -34,10 +34,10 @@ public interface InfoService extends RestService {
 
     //check!
     @GET
-    @Path("/auth/account/{request}")
+    @Path("/auth/account")
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
-    public void getAccount(@PathParam("request") String login, MethodCallback<AccountConfirmation> callback);
+    public void getAccount(MethodCallback<AccountConfirmation> callback);
 
     @POST
     @Path("/auth/newAccount")

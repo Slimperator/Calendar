@@ -21,19 +21,19 @@ import java.util.Properties;
 
 @Configuration
 @EnableTransactionManagement
-@ComponentScan("com.calendar.server")
+@ComponentScan("com.calendar.server.databaseconnector")
 @PropertySource("classpath:app.properties")
 @EnableJpaRepositories(
         "com.calendar.server.databaseconnector.repository")
 public class DataBaseConfig {
 
-    private static final String PROP_DATABASE_DRIVER = "driver";
-    private static final String PROP_DATABASE_PASSWORD = "password";
-    private static final String PROP_DATABASE_URL = "url";
-    private static final String PROP_DATABASE_USERNAME = "username";
+    private static final String PROP_DATABASE_DRIVER = "db.driver";
+    private static final String PROP_DATABASE_PASSWORD = "db.password";
+    private static final String PROP_DATABASE_URL = "db.url";
+    private static final String PROP_DATABASE_USERNAME = "db.username";
     private static final String PROP_HIBERNATE_DIALECT = "hibernate.dialect";
     private static final String PROP_HIBERNATE_SHOW_SQL = "hibernate.show_sql";
-    private static final String PROP_ENTITYMANAGER_PACKAGES_TO_SCAN = "entitymanager.packages.to.scan";
+    private static final String PROP_ENTITYMANAGER_PACKAGES_TO_SCAN = "hibernate.entitymanager.packages.to.scan";
     private static final String PROP_HIBERNATE_HBM2DDL_AUTO = "hibernate.hbm2ddl.auto";
 
     @Resource

@@ -16,6 +16,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.ServletException;
@@ -35,10 +36,12 @@ public class CalendarController {
     private AccountsService accountsService;
     @Autowired
     private CalendarService calendarService;
-    @Autowired
-    private UserDetailsServiceImpl userDetailsService;
     //check!
-    @RequestMapping(value = "/auth/newAccount", method = RequestMethod.POST, headers = "Accept=application/json")
+    @RequestMapping()
+    public String showMeTheLoginPage(Model model) {
+        return "redirect:/login.jsp";
+    }
+    @RequestMapping(value = "/newAccount", method = RequestMethod.POST, headers = "Accept=application/json")
     public @ResponseBody
     AccountConfirmation newAccountRequest(@RequestBody AccountConfirmation request) throws ServletException, IOException {
         AccountConfirmation confirmation = request;
@@ -58,7 +61,8 @@ public class CalendarController {
     public @ResponseBody
     AccountConfirmation deleteAccountRequest(@RequestBody String login) throws ServletException, IOException {
         AccountConfirmation confirmation = new AccountConfirmation();
-        confirmation.login = login;
+        confirmation.login = (String) SecurityContextHolder.getContext()
+                .getAuthentication().getPrincipal();
         try {
             accountsService.deleteAccount(confirmation.login);
             confirmation.success = "ok";
@@ -76,7 +80,8 @@ public class CalendarController {
     AccountConfirmation editAccountRequest(@RequestBody AccountConfirmation request) throws ServletException, IOException {
         AccountConfirmation confirmation = request;
         try {
-            Accounts account = accountsService.getAccount(com.calendar.server.security.Tools.MD5Generator(confirmation.login));
+            Accounts account = accountsService.getAccount((String) SecurityContextHolder.getContext()
+                    .getAuthentication().getPrincipal());
             account.setPasswordHash(com.calendar.server.security.Tools.MD5Generator(confirmation.newPassword));
             accountsService.editAccount(account);
             confirmation.success = "ok";
@@ -89,13 +94,14 @@ public class CalendarController {
         }
     }
     //FAIL!
-    @RequestMapping(value = "/auth/account/{request}", method = RequestMethod.GET, headers = "Accept=application/json")
+    @RequestMapping(value = "/auth/account", method = RequestMethod.GET, headers = "Accept=application/json")
     public @ResponseBody
-    AccountConfirmation getAccountRequest(@RequestParam("request")String login) throws ServletException, IOException {
+    AccountConfirmation getAccountRequest() throws ServletException, IOException {
         AccountConfirmation confirmation = new AccountConfirmation();
-        confirmation.login = login;
+        confirmation.login = (String) SecurityContextHolder.getContext()
+                .getAuthentication().getName();
         try {
-            Accounts account = accountsService.getAccount(com.calendar.server.security.Tools.MD5Generator(confirmation.login));
+            Accounts account = accountsService.getAccount(confirmation.login);
             confirmation.success = "ok";
         }
         catch (Exception e){
@@ -112,12 +118,12 @@ public class CalendarController {
         EventConfirmation confirmation = request;
         try {
             SimpleDateFormat df = new SimpleDateFormat("yyyyMMdd");
-            Accounts account = accountsService.getAccount(com.calendar.server.security.Tools.MD5Generator(confirmation.account));
+            Accounts account = accountsService.getAccount(SecurityContextHolder.getContext().getAuthentication().getName());
             calendarService.addEvent(new Calendar(
                     confirmation.name,
                     confirmation.description,
-                    new java.sql.Date(df.parse(confirmation.beginDate).getTime()),
-                    new java.sql.Date(df.parse(confirmation.endDate).getTime()),
+                    new java.sql.Date(confirmation.beginDate.getTime()),
+                    new java.sql.Date(confirmation.endDate.getTime()),
                     account
             ));
             confirmation.success = "ok";
@@ -136,12 +142,12 @@ public class CalendarController {
         EventConfirmation confirmation = request;
         try {
             SimpleDateFormat df = new SimpleDateFormat("yyyyMMdd");
-            Accounts account = accountsService.getAccount(com.calendar.server.security.Tools.MD5Generator(confirmation.account));
+            Accounts account = accountsService.getAccount(SecurityContextHolder.getContext().getAuthentication().getName());
             Calendar event = calendarService.getEvent(confirmation.name);
             event.setName(confirmation.newName);
             event.setDescription(confirmation.description);
-            event.setBegin_data(new java.sql.Date(df.parse(confirmation.beginDate).getTime()));
-            event.setEnd_data(new java.sql.Date(df.parse(confirmation.endDate).getTime()));
+            event.setBegin_data(new java.sql.Date(confirmation.beginDate.getTime()));
+            event.setEnd_data(new java.sql.Date(confirmation.endDate.getTime()));
             calendarService.editEvent(event);
             confirmation.success = "ok";
         }
@@ -159,15 +165,16 @@ public class CalendarController {
         EventConfirmation confirmation = request;
         List<EventConfirmation> response = new ArrayList<EventConfirmation>();
         try {
-            SimpleDateFormat df = new SimpleDateFormat("yyyyMMdd");
-            List<Calendar> events = calendarService.getEventsByRange(new java.sql.Date(df.parse(confirmation.beginDate).getTime()),
-                    new java.sql.Date(df.parse(confirmation.endDate).getTime()));
+            SimpleDateFormat df = new SimpleDateFormat("yyyyMMddHHmm");
+            List<Calendar> events = calendarService.getEventsByRange(new java.sql.Date(confirmation.beginDate.getTime()),
+                    new java.sql.Date(confirmation.endDate.getTime()),
+                    SecurityContextHolder.getContext().getAuthentication().getName());
             for(Calendar event: events)
-            {   //Настроить тустринг и продумать схему хранения на клиенте
+            {
                 EventConfirmation element = new EventConfirmation();
                 element.description = event.getDescription();
-                element.beginDate = df.format(event.getBegin_data());
-                element.endDate = df.format(event.getEnd_data());
+                element.beginDate = event.getBegin_data();
+                element.endDate = event.getEnd_data();
                 element.name = event.getName();
                 response.add(element);
             }
@@ -186,7 +193,8 @@ public class CalendarController {
         EventConfirmation confirmation = new EventConfirmation();
         confirmation.name = eventName;
         try {
-            calendarService.deleteEvent(calendarService.getEvent(confirmation.name));
+            calendarService.deleteEvent(calendarService.getEvent(confirmation.name),
+                    SecurityContextHolder.getContext().getAuthentication().getName());
             confirmation.success = "ok";
         }
         catch (Exception e){
@@ -205,8 +213,8 @@ public class CalendarController {
             SimpleDateFormat df = new SimpleDateFormat("yyyyMMdd");
             Calendar event = calendarService.getEvent(eventName);
             confirmation.description = event.getDescription();
-            confirmation.beginDate = df.format(event.getBegin_data());
-            confirmation.endDate = df.format(event.getEnd_data());
+            confirmation.beginDate = event.getBegin_data();
+            confirmation.endDate = event.getEnd_data();
             confirmation.name = event.getName();
             confirmation.success = "ok";
         }

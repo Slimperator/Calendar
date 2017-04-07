@@ -20,8 +20,9 @@ public class AccountsServiceImpl implements AccountsService {
     }
 
     @Override
-    public void deleteAccount(String accountHash) {
-        accountsRepository.deleteByAccountHash(accountHash);
+    public void deleteAccount(String accountName) {
+        accountsRepository.deleteByAccountHash(accountName);
+        accountsRepository.flush();
     }
 
     @Override
@@ -30,13 +31,13 @@ public class AccountsServiceImpl implements AccountsService {
     }
 
     @Override
-    public String getHeshPass(String accountHash) {
-        Accounts account = accountsRepository.findeByAccountHash(accountHash);
+    public String getHeshPass(String accountName) {
+        Accounts account = accountsRepository.findeByAccountName(accountName);
         return account.getPasswordHash();
     }
 
     @Override
-    public Accounts getAccount(String accountHash) {
-        return accountsRepository.findeByAccountHash(accountHash);
+    public Accounts getAccount(String accountName) {
+        return accountsRepository.findeByAccountName(accountName);
     }
 }

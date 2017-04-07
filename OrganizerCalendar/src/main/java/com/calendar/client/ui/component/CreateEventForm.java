@@ -1,0 +1,124 @@
+package com.calendar.client.ui.component;
+
+import com.calendar.client.InfoService;
+import com.calendar.client.json.EventConfirmation;
+import com.google.gwt.core.client.GWT;
+import com.google.gwt.dom.client.Style;
+import com.google.gwt.event.dom.client.ClickEvent;
+import com.google.gwt.event.dom.client.ClickHandler;
+import com.google.gwt.user.client.Window;
+import com.google.gwt.user.client.ui.*;
+import com.google.gwt.user.datepicker.client.DateBox;
+import org.fusesource.restygwt.client.Method;
+import org.fusesource.restygwt.client.MethodCallback;
+
+/**
+ * Created by Владимир on 20.03.2017.
+ */
+public class CreateEventForm {
+    private FormPanel eventForm;
+    public CreateEventForm()
+    {
+        eventForm = new FormPanel();
+
+        // Create a panel to hold all of the form widgets.
+        FlowPanel panel = new FlowPanel();
+        eventForm.setWidget(panel);
+
+        // Create a TextBox, giving it a name so that it will be submitted.
+        TextBox nameTextBox = new TextBox();
+        DateBox dateBeginDateBox = new DateBox();
+        TextBox descriptionTextBox = new TextBox();
+        DateBox dateEndDateBox = new DateBox();
+        Label nameLabel = new Label();
+        Label dateBeginLabel = new Label();
+        Label descriptionLabel = new Label();
+        Label dateEndLabel = new Label();
+
+        nameLabel.setText("Event Name:");
+        dateBeginLabel.setText("Begin in:");
+        dateEndLabel.setText("End in:");
+        descriptionLabel.setText("Description:");
+
+        nameLabel.getElement().getStyle().setDisplay(Style.Display.BLOCK);
+        descriptionTextBox.getElement().getStyle().setDisplay(Style.Display.BLOCK);
+        nameTextBox.getElement().getStyle().setDisplay(Style.Display.BLOCK);
+        dateBeginDateBox.getElement().getStyle().setDisplay(Style.Display.BLOCK);
+        dateBeginLabel.getElement().getStyle().setDisplay(Style.Display.BLOCK);
+        dateEndDateBox.getElement().getStyle().setDisplay(Style.Display.BLOCK);
+        dateEndLabel.getElement().getStyle().setDisplay(Style.Display.BLOCK);
+        descriptionLabel.getElement().getStyle().setDisplay(Style.Display.BLOCK);
+
+        panel.add(nameLabel);
+        panel.add(nameTextBox);
+        panel.add(dateBeginLabel);
+        panel.add(dateBeginDateBox);
+        panel.add(dateEndLabel);
+        panel.add(dateEndDateBox);
+        panel.add(descriptionLabel);
+        panel.add(descriptionTextBox);
+
+        // Add a 'submit' button.
+        panel.add(new Button("Submit", new ClickHandler() {
+            public void onClick(ClickEvent event) {
+                eventForm.submit();
+            }
+        }));
+        // Add an event handler to the form.
+        eventForm.addSubmitHandler(new FormPanel.SubmitHandler() {
+            public void onSubmit(FormPanel.SubmitEvent event) {
+                // This event is fired just before the form is submitted. We can take
+                // this opportunity to perform validation.
+                if (nameTextBox.getText().length() == 0 ||
+                        descriptionTextBox.getText().length() == 0 ||
+                        dateBeginDateBox.getValue() == null ||
+                        dateEndDateBox.getValue() == null) {
+                    Window.alert("The filds must not be empty");
+                    event.cancel();
+                }
+                
+                if(dateBeginDateBox.getValue().compareTo(dateEndDateBox.getValue()) >= 0)
+                {
+                    Window.alert("Begin date must not be more than end date");
+                    event.cancel();
+                }
+            }
+        });
+        eventForm.addSubmitCompleteHandler(new FormPanel.SubmitCompleteHandler() {
+            public void onSubmitComplete(FormPanel.SubmitCompleteEvent event) {
+                // When the form submission is successfully completed, this event is
+                // fired. Assuming the service returned a response of type text/html,
+                // we can get the result text here (see the FormPanel documentation for
+                // further explanation).
+                GWT.log("Event submit begin");
+                EventConfirmation ec = new EventConfirmation();
+
+                ec.name = nameTextBox.getText();
+                ec.description = descriptionTextBox.getText();
+                GWT.log("Create DATE objects");
+                ec.beginDate = dateBeginDateBox.getValue();
+                ec.endDate = dateEndDateBox.getValue();
+                GWT.log("Try connect with server");
+                InfoService.Util.getService().createEvent(ec, new MethodCallback<EventConfirmation>() {
+                    @Override
+                    public void onFailure(Method method, Throwable throwable) {
+                        Window.alert("Error: Can't send event on server");
+                    }
+
+                    @Override
+                    public void onSuccess(Method method, EventConfirmation eventConfirmation) {
+                        Window.alert("Success!");
+                    }
+                });
+            }
+        });
+    }
+
+    public FormPanel getEventForm() {
+        return eventForm;
+    }
+
+    public void setEventForm(FormPanel eventForm) {
+        this.eventForm = eventForm;
+    }
+}

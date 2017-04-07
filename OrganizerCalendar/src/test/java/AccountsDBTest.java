@@ -5,7 +5,9 @@ import javax.annotation.Resource;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 
+import com.calendar.server.databaseconnector.entity.Accounts;
 import com.calendar.server.databaseconnector.service.AccountsService;
+import com.calendar.server.security.Tools;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -36,6 +38,15 @@ public class AccountsDBTest {
 
     @Test
     public void testSaveBank() throws Exception {
-        //accountsService.addAccount(AccountUtil.createAccounts());
+        accountsService.addAccount(AccountUtil.createAccounts());
+
+        Accounts accounts = accountsService.getAccount("asdas");
+        if(accounts!=null)
+            System.out.println("account get!");
+        else
+            System.out.println("account null!");
+        accountsService.deleteAccount("asdas");
+        System.out.println("5d41402abc4b2a76b9719d911017c592");
+        System.out.println(Tools.MD5Generator("hello"));
     }
 }

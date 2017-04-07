@@ -7,8 +7,8 @@ import com.calendar.server.databaseconnector.entity.Accounts;
  */
 public interface AccountsService {
     Accounts addAccount(Accounts account);
-    void deleteAccount(String accountHash);
+    void deleteAccount(String accountName);
     Accounts editAccount(Accounts account);
-    String getHeshPass(String accountHash);
-    Accounts getAccount(String accountHash);
+    String getHeshPass(String accountName);
+    Accounts getAccount(String accountName);
 }

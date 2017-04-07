@@ -2,6 +2,7 @@ package com.calendar.client.json;
 
 import org.fusesource.restygwt.client.JsonEncoderDecoder;
 
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -12,8 +13,8 @@ public class EventConfirmation {
     public String name;
     public String newName;
     public String description;
-    public String beginDate;
-    public String endDate;
+    public Date beginDate;
+    public Date endDate;
     public String account;
     /**
      * Example of how to create an instance of a JsonEncoderDecoder for a data

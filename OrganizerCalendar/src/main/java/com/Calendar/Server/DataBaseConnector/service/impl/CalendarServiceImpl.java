@@ -17,8 +17,9 @@ public class CalendarServiceImpl implements CalendarService {
     private CalendarRepository calendarRepository;
 
     @Override
-    public void deleteEvent(Calendar calendar) {
-        calendarRepository.delete(calendar);
+    public void deleteEvent(Calendar calendar, String accountName) {
+        calendarRepository.deleteEvent(calendar.getName(), accountName);
+        calendarRepository.flush();
     }
 
     @Override
@@ -27,8 +28,8 @@ public class CalendarServiceImpl implements CalendarService {
     }
 
     @Override
-    public List<Calendar> getEventsByRange(Date begin, Date end) {
-        return calendarRepository.findeByDateRange(begin, end);
+    public List<Calendar> getEventsByRange(Date begin, Date end, String accountName) {
+        return calendarRepository.findeByDateRange(begin, end, accountName);
     }
 
     @Override

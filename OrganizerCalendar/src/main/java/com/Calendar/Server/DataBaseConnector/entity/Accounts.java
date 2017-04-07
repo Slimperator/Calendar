@@ -17,13 +17,13 @@ public class Accounts {
     @Column(name = "id", nullable = false, unique = true)
     private Integer id;
 
-    @Column(name = "accountHash", unique = true, nullable = false)
-    private String accountHash;
+    @Column(name = "account", unique = true, nullable = false)
+    private String account;
 
     @Column(name = "passwordHash", nullable = false)
     private String passwordHash;
 
-    @OneToMany(fetch = FetchType.EAGER, mappedBy = "account_id")
+    @OneToMany(fetch = FetchType.EAGER, mappedBy = "account_creator")
     private List<Calendar> calendar;
 
     public List<Calendar> getCalendar() {
@@ -34,9 +34,12 @@ public class Accounts {
         this.calendar = calendar;
     }
 
-    public Accounts(String accountHash, String passwordHash)
+    public Accounts()
+    {}
+
+    public Accounts(String account, String passwordHash)
     {
-        this.accountHash = accountHash;
+        this.account = account;
         this.passwordHash = passwordHash;
     }
 
@@ -48,12 +51,12 @@ public class Accounts {
         this.id = id;
     }
 
-    public String getAccountHash() {
-        return accountHash;
+    public String getAccount() {
+        return account;
     }
 
-    public void setAccountHash(String accountHash) {
-        this.accountHash = accountHash;
+    public void setAccount(String account) {
+        this.account = account;
     }
 
     public String getPasswordHash() {
