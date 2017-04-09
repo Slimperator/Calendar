@@ -4,6 +4,11 @@ import org.hibernate.annotations.GenericGenerator;
 import javax.persistence.*;
 import java.sql.Date;
 
+import static javax.persistence.CascadeType.REFRESH;
+import static javax.persistence.CascadeType.DETACH;
+import static javax.persistence.CascadeType.MERGE;
+import static javax.persistence.CascadeType.REMOVE;
+
 /**
  * Created by Владимир on 11.02.2017.
  */
@@ -16,7 +21,7 @@ public class Calendar {
     @Column(name = "id", nullable = false, unique = true)
     private Integer id;
 
-    @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    @ManyToOne(fetch = FetchType.EAGER, cascade={MERGE, REMOVE, REFRESH, DETACH})
     @JoinColumn(name = "account_creator", nullable = false)
     private Accounts account_creator;
 

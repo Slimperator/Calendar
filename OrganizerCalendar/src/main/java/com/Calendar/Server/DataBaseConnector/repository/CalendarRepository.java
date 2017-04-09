@@ -1,5 +1,6 @@
 package com.calendar.server.databaseconnector.repository;
 
+import com.calendar.server.databaseconnector.entity.Accounts;
 import org.springframework.data.jpa.repository.JpaRepository;
 import com.calendar.server.databaseconnector.entity.Calendar;
 import org.springframework.data.jpa.repository.Modifying;
@@ -19,7 +20,7 @@ public interface CalendarRepository extends JpaRepository<Calendar, Integer>{
     @Query("select a from Calendar a where a.account_creator =:account and a.begin_data between :begin and :endd")
     List<Calendar> findeByDateRange(@Param("begin") Date begin,
                                     @Param("endd") Date end,
-                                    @Param("account") String account);
+                                    @Param("account") Accounts account);
     @Modifying
     @Transactional
     @Query("Delete from Calendar t where t.account_creator= :accountName and t.name = :name")

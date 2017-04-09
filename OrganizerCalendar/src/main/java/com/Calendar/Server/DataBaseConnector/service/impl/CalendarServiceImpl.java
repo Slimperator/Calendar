@@ -1,5 +1,6 @@
 package com.calendar.server.databaseconnector.service.impl;
 
+import com.calendar.server.databaseconnector.entity.Accounts;
 import com.calendar.server.databaseconnector.entity.Calendar;
 import com.calendar.server.databaseconnector.repository.CalendarRepository;
 import com.calendar.server.databaseconnector.service.CalendarService;
@@ -28,8 +29,8 @@ public class CalendarServiceImpl implements CalendarService {
     }
 
     @Override
-    public List<Calendar> getEventsByRange(Date begin, Date end, String accountName) {
-        return calendarRepository.findeByDateRange(begin, end, accountName);
+    public List<Calendar> getEventsByRange(Date begin, Date end, Accounts account) {
+        return calendarRepository.findeByDateRange(begin, end, account);
     }
 
     @Override

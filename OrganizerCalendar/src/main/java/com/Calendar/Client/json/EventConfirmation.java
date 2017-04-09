@@ -16,6 +16,7 @@ public class EventConfirmation {
     public Date beginDate;
     public Date endDate;
     public String account;
+
     /**
      * Example of how to create an instance of a JsonEncoderDecoder for a data
      * transfer object.

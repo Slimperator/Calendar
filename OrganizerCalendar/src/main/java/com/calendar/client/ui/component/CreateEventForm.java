@@ -61,44 +61,30 @@ public class CreateEventForm {
         // Add a 'submit' button.
         panel.add(new Button("Submit", new ClickHandler() {
             public void onClick(ClickEvent event) {
-                eventForm.submit();
-            }
-        }));
-        // Add an event handler to the form.
-        eventForm.addSubmitHandler(new FormPanel.SubmitHandler() {
-            public void onSubmit(FormPanel.SubmitEvent event) {
-                // This event is fired just before the form is submitted. We can take
-                // this opportunity to perform validation.
+
                 if (nameTextBox.getText().length() == 0 ||
                         descriptionTextBox.getText().length() == 0 ||
                         dateBeginDateBox.getValue() == null ||
                         dateEndDateBox.getValue() == null) {
                     Window.alert("The filds must not be empty");
-                    event.cancel();
+                    return;
                 }
-                
+
                 if(dateBeginDateBox.getValue().compareTo(dateEndDateBox.getValue()) >= 0)
                 {
                     Window.alert("Begin date must not be more than end date");
-                    event.cancel();
+                    return;
                 }
-            }
-        });
-        eventForm.addSubmitCompleteHandler(new FormPanel.SubmitCompleteHandler() {
-            public void onSubmitComplete(FormPanel.SubmitCompleteEvent event) {
-                // When the form submission is successfully completed, this event is
-                // fired. Assuming the service returned a response of type text/html,
-                // we can get the result text here (see the FormPanel documentation for
-                // further explanation).
-                GWT.log("Event submit begin");
+
+                //GWT.log("Event submit begin");
                 EventConfirmation ec = new EventConfirmation();
 
                 ec.name = nameTextBox.getText();
                 ec.description = descriptionTextBox.getText();
-                GWT.log("Create DATE objects");
+                //GWT.log("Create DATE objects");
                 ec.beginDate = dateBeginDateBox.getValue();
                 ec.endDate = dateEndDateBox.getValue();
-                GWT.log("Try connect with server");
+                //GWT.log("Try connect with server");
                 InfoService.Util.getService().createEvent(ec, new MethodCallback<EventConfirmation>() {
                     @Override
                     public void onFailure(Method method, Throwable throwable) {
@@ -111,7 +97,7 @@ public class CreateEventForm {
                     }
                 });
             }
-        });
+        }));
     }
 
     public FormPanel getEventForm() {

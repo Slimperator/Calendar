@@ -88,15 +88,20 @@ public class MenuPanel {
                 EventConfirmation ec = new EventConfirmation();
                 ec.beginDate = BufferSingletone.getBuffer().getChoosenDate();
                 ec.endDate = new Date(ec.beginDate.getTime() + (1000 * 60 * 60 * 24));
+                //Window.alert("Date in buffer:" + BufferSingletone.getBuffer().getChoosenDate() + "; Date in request:"
+                //+ ec.beginDate + "   " + ec.endDate);
                 InfoService.Util.getService().getEventsByRange(ec, new MethodCallback<List<EventConfirmation>>() {
                     @Override
                     public void onFailure(Method method, Throwable throwable) {
                         Window.alert("Error: Can't load events from server");
+                        Window.alert(throwable.getMessage());
                     }
 
                     @Override
                     public void onSuccess(Method method, List<EventConfirmation> eventConfirmations) {
+                        //Window.alert("All OK");
                         BufferSingletone.getBuffer().setEvents(eventConfirmations);
+                        Window.alert(BufferSingletone.getBuffer().getEvents().toString());
                         BufferSingletone.getBuffer().notifyObserver();
                     }
                 });

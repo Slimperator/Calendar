@@ -10,6 +10,7 @@ import com.calendar.server.databaseconnector.service.CalendarService;
 import com.calendar.server.databaseconnector.service.impl.AccountsServiceImpl;
 import com.calendar.server.databaseconnector.service.impl.CalendarServiceImpl;
 import com.calendar.server.security.spring.impl.UserDetailsServiceImpl;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -25,7 +26,9 @@ import java.awt.*;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 
 /**
  * Created by Владимир on 05.02.2017.
@@ -119,13 +122,16 @@ public class CalendarController {
         try {
             SimpleDateFormat df = new SimpleDateFormat("yyyyMMdd");
             Accounts account = accountsService.getAccount(SecurityContextHolder.getContext().getAuthentication().getName());
-            calendarService.addEvent(new Calendar(
+            Calendar newEvent =  new Calendar(
                     confirmation.name,
                     confirmation.description,
                     new java.sql.Date(confirmation.beginDate.getTime()),
                     new java.sql.Date(confirmation.endDate.getTime()),
                     account
-            ));
+            );
+            account.getCalendar().add(newEvent);
+            accountsService.editAccount(account);
+            calendarService.addEvent(newEvent);
             confirmation.success = "ok";
         }
         catch (Exception e){
@@ -159,23 +165,24 @@ public class CalendarController {
         }
     }
     //Add search for account
-    @RequestMapping(value = "/auth/eventsByRange", method = RequestMethod.GET, headers = "Accept=application/json")
+    @RequestMapping(value = "/auth/eventsByRange", method = RequestMethod.POST, headers = "Accept=application/json")
     public @ResponseBody
-    List<EventConfirmation> getEventByDateRequest(EventConfirmation request) throws ServletException, IOException {
+    List<EventConfirmation> getEventByDateRequest(@RequestBody EventConfirmation request) throws ServletException, IOException {
         EventConfirmation confirmation = request;
         List<EventConfirmation> response = new ArrayList<EventConfirmation>();
         try {
-            SimpleDateFormat df = new SimpleDateFormat("yyyyMMddHHmm");
+            SimpleDateFormat df = new SimpleDateFormat("EEE MMM dd HH:mm:ss Z yyyy", new Locale("msk"));
             List<Calendar> events = calendarService.getEventsByRange(new java.sql.Date(confirmation.beginDate.getTime()),
                     new java.sql.Date(confirmation.endDate.getTime()),
-                    SecurityContextHolder.getContext().getAuthentication().getName());
+                    accountsService.getAccount(SecurityContextHolder.getContext().getAuthentication().getName()));
             for(Calendar event: events)
             {
                 EventConfirmation element = new EventConfirmation();
                 element.description = event.getDescription();
-                element.beginDate = event.getBegin_data();
-                element.endDate = event.getEnd_data();
+                element.beginDate = new Date(df.format(event.getBegin_data()));
+                element.endDate = new Date(df.format(event.getEnd_data()));
                 element.name = event.getName();
+                element.account = SecurityContextHolder.getContext().getAuthentication().getName();
                 response.add(element);
             }
         }
@@ -193,6 +200,9 @@ public class CalendarController {
         EventConfirmation confirmation = new EventConfirmation();
         confirmation.name = eventName;
         try {
+            Accounts account = accountsService.getAccount(SecurityContextHolder.getContext().getAuthentication().getName());
+            account.getCalendar().remove(calendarService.getEvent(confirmation.name));
+            accountsService.editAccount(account);
             calendarService.deleteEvent(calendarService.getEvent(confirmation.name),
                     SecurityContextHolder.getContext().getAuthentication().getName());
             confirmation.success = "ok";
@@ -213,8 +223,8 @@ public class CalendarController {
             SimpleDateFormat df = new SimpleDateFormat("yyyyMMdd");
             Calendar event = calendarService.getEvent(eventName);
             confirmation.description = event.getDescription();
-            confirmation.beginDate = event.getBegin_data();
-            confirmation.endDate = event.getEnd_data();
+            confirmation.beginDate = new Date(event.getBegin_data().getTime());
+            confirmation.endDate = new Date(event.getEnd_data().getTime());
             confirmation.name = event.getName();
             confirmation.success = "ok";
         }

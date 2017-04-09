@@ -63,7 +63,7 @@ public interface InfoService extends RestService {
     @Produces(MediaType.APPLICATION_JSON)
     public void getEvent(@PathParam("eventName") String eventName, MethodCallback<EventConfirmation> callback);
 
-    @GET
+    @POST
     @Path("/auth/eventsByRange")
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)

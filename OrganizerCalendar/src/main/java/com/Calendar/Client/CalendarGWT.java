@@ -7,6 +7,7 @@ import com.calendar.client.ui.controllers.CenterFlowPannelStateController;
 import com.google.gwt.core.client.EntryPoint;
 import com.google.gwt.dom.client.Style;
 import com.google.gwt.user.client.ui.*;
+import org.fusesource.restygwt.client.Defaults;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -16,6 +17,9 @@ import java.util.List;
  * Created by Владимир on 20.02.2017.
  */
 public class CalendarGWT implements EntryPoint {
+    static {
+        Defaults.setDateFormat(null);
+    }
     private CalendarPanel calendarPanel;
     private CreateEventForm createEventForm;
     private EventInfoStackPanel eventInfoStackPanel;
@@ -61,6 +65,8 @@ public class CalendarGWT implements EntryPoint {
                 );
         //регестрируем наблюдателя
         buffer.addObserver(calendarPanel);
+        buffer.addObserver(eventInfoStackPanel);
+        buffer.addObserver(accountInfo);
         //заполняем экран
         DockLayoutPanel mainDockLayoutPanel = new DockLayoutPanel(Style.Unit.EM);
         mainDockLayoutPanel.addEast(calendarPanel.getCalendarFlowPanel(), 10);
