@@ -29,6 +29,7 @@ public class MenuPanel {
     public MenuPanel()
     {
         menuPanel = new FlowPanel();
+        menuPanel.setStyleName("menuStyle");
         Button eventsButton = new Button("Events");
         Button newEventButton = new Button("New Event");
         Button accountButton = new Button("Account");
@@ -46,6 +47,15 @@ public class MenuPanel {
         //accountButton.setSize(widthButton, heightButton);
         //exitButton.setSize(widthButton, heightButton);
         //newEventButton.setSize(widthButton, heightButton);
+
+        eventsButton.setStyleName("menuButtonStyle");
+        accountButton.setStyleName("menuButtonStyle");
+        exitButton.setStyleName("menuButtonStyle");
+        newEventButton.setStyleName("menuButtonStyle");
+        loginButton.setStyleName("menuButtonStyle");
+        newAccountButton.setStyleName("menuButtonStyle");
+
+
         loginButton.addClickHandler(new ClickHandler() {
             @Override
             public void onClick(ClickEvent event) {
@@ -100,8 +110,9 @@ public class MenuPanel {
                     @Override
                     public void onSuccess(Method method, List<EventConfirmation> eventConfirmations) {
                         //Window.alert("All OK");
+                        //BufferSingletone.getBuffer().getEvents().clear();
                         BufferSingletone.getBuffer().setEvents(eventConfirmations);
-                        Window.alert(BufferSingletone.getBuffer().getEvents().toString());
+                        //Window.alert(BufferSingletone.getBuffer().getEvents().toString());
                         BufferSingletone.getBuffer().notifyObserver();
                     }
                 });

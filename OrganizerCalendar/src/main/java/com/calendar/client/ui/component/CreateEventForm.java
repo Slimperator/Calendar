@@ -20,7 +20,7 @@ public class CreateEventForm {
     public CreateEventForm()
     {
         eventForm = new FormPanel();
-
+        eventForm.setStyleName("centerPanelStyle");
         // Create a panel to hold all of the form widgets.
         FlowPanel panel = new FlowPanel();
         eventForm.setWidget(panel);
@@ -34,6 +34,16 @@ public class CreateEventForm {
         Label dateBeginLabel = new Label();
         Label descriptionLabel = new Label();
         Label dateEndLabel = new Label();
+
+        nameLabel.setStyleName("labelStyle");
+        dateBeginLabel.setStyleName("labelStyle");
+        dateEndLabel.setStyleName("labelStyle");
+        descriptionLabel.setStyleName("labelStyle");
+
+        nameTextBox.setStyleName("textBoxStyle");
+        dateBeginDateBox.setStyleName("textBoxStyle");
+        dateEndDateBox.setStyleName("textBoxStyle");
+        descriptionTextBox.setStyleName("descriptionTextBoxStyle");
 
         nameLabel.setText("Event Name:");
         dateBeginLabel.setText("Begin in:");
@@ -58,8 +68,7 @@ public class CreateEventForm {
         panel.add(descriptionLabel);
         panel.add(descriptionTextBox);
 
-        // Add a 'submit' button.
-        panel.add(new Button("Submit", new ClickHandler() {
+        Button button = new Button("Submit", new ClickHandler() {
             public void onClick(ClickEvent event) {
 
                 if (nameTextBox.getText().length() == 0 ||
@@ -97,7 +106,10 @@ public class CreateEventForm {
                     }
                 });
             }
-        }));
+        });
+        button.setStyleName("menuButtonStyle");
+        // Add a 'submit' button.
+        panel.add(button);
     }
 
     public FormPanel getEventForm() {

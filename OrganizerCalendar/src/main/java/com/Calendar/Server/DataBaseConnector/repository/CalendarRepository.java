@@ -9,7 +9,7 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
-import java.sql.Date;
+import java.util.Date;
 /**
  * Created by Владимир on 12.02.2017.
  */
@@ -24,6 +24,6 @@ public interface CalendarRepository extends JpaRepository<Calendar, Integer>{
     @Modifying
     @Transactional
     @Query("Delete from Calendar t where t.account_creator= :accountName and t.name = :name")
-    Integer deleteEvent(@Param("name")String eventName, @Param("accountName")String accountName);
+    Integer deleteEvent(@Param("name")String eventName, @Param("accountName")Accounts account);
     //!!! Возможно стоит добавить проверку аккаунта до обращения к БД
 }

@@ -5,8 +5,10 @@ import com.calendar.client.json.EventConfirmation;
 import com.calendar.client.json.LoginConfirmation;
 import com.calendar.server.databaseconnector.entity.Accounts;
 import com.calendar.server.databaseconnector.entity.Calendar;
+import com.calendar.server.databaseconnector.entity.Invites;
 import com.calendar.server.databaseconnector.service.AccountsService;
 import com.calendar.server.databaseconnector.service.CalendarService;
+import com.calendar.server.databaseconnector.service.InvitesService;
 import com.calendar.server.databaseconnector.service.impl.AccountsServiceImpl;
 import com.calendar.server.databaseconnector.service.impl.CalendarServiceImpl;
 import com.calendar.server.security.spring.impl.UserDetailsServiceImpl;
@@ -39,6 +41,8 @@ public class CalendarController {
     private AccountsService accountsService;
     @Autowired
     private CalendarService calendarService;
+    @Autowired
+    private InvitesService invitesService;
     //check!
     @RequestMapping()
     public String showMeTheLoginPage(Model model) {
@@ -125,8 +129,8 @@ public class CalendarController {
             Calendar newEvent =  new Calendar(
                     confirmation.name,
                     confirmation.description,
-                    new java.sql.Date(confirmation.beginDate.getTime()),
-                    new java.sql.Date(confirmation.endDate.getTime()),
+                    confirmation.beginDate,
+                    confirmation.endDate,
                     account
             );
             account.getCalendar().add(newEvent);
@@ -171,18 +175,24 @@ public class CalendarController {
         EventConfirmation confirmation = request;
         List<EventConfirmation> response = new ArrayList<EventConfirmation>();
         try {
-            SimpleDateFormat df = new SimpleDateFormat("EEE MMM dd HH:mm:ss Z yyyy", new Locale("msk"));
-            List<Calendar> events = calendarService.getEventsByRange(new java.sql.Date(confirmation.beginDate.getTime()),
-                    new java.sql.Date(confirmation.endDate.getTime()),
+            SimpleDateFormat df = new SimpleDateFormat("EEE MMM dd HH:mm:ss Z yyyy", new Locale("ru"));
+            List<Calendar> events = calendarService.getEventsByRange(confirmation.beginDate,
+                    confirmation.endDate,
                     accountsService.getAccount(SecurityContextHolder.getContext().getAuthentication().getName()));
             for(Calendar event: events)
             {
                 EventConfirmation element = new EventConfirmation();
                 element.description = event.getDescription();
-                element.beginDate = new Date(df.format(event.getBegin_data()));
-                element.endDate = new Date(df.format(event.getEnd_data()));
+                element.beginDate = event.getBegin_data();
+                element.endDate = event.getEnd_data();
                 element.name = event.getName();
                 element.account = SecurityContextHolder.getContext().getAuthentication().getName();
+                List<Accounts> invs = invitesService.getAllInvites(event);
+                element.invites = new ArrayList<>();
+                for(Accounts acs: invs)
+                {
+                    element.invites.add(acs.getAccount());
+                }
                 response.add(element);
             }
         }
@@ -204,7 +214,7 @@ public class CalendarController {
             account.getCalendar().remove(calendarService.getEvent(confirmation.name));
             accountsService.editAccount(account);
             calendarService.deleteEvent(calendarService.getEvent(confirmation.name),
-                    SecurityContextHolder.getContext().getAuthentication().getName());
+                    accountsService.getAccount(SecurityContextHolder.getContext().getAuthentication().getName()));
             confirmation.success = "ok";
         }
         catch (Exception e){
@@ -223,8 +233,8 @@ public class CalendarController {
             SimpleDateFormat df = new SimpleDateFormat("yyyyMMdd");
             Calendar event = calendarService.getEvent(eventName);
             confirmation.description = event.getDescription();
-            confirmation.beginDate = new Date(event.getBegin_data().getTime());
-            confirmation.endDate = new Date(event.getEnd_data().getTime());
+            confirmation.beginDate = event.getBegin_data();
+            confirmation.endDate = event.getEnd_data();
             confirmation.name = event.getName();
             confirmation.success = "ok";
         }
@@ -246,6 +256,43 @@ public class CalendarController {
             return null;
         } else {
             return (String) authentication.getPrincipal();
+        }
+    }
+
+    @RequestMapping(value = "/auth/invite", method = RequestMethod.POST, headers = "Accept=application/json")
+    public @ResponseBody
+    void createInvite(@RequestBody EventConfirmation request) throws ServletException, IOException{
+        List<String> accountNames = request.invites;
+        try {
+            Calendar event = calendarService.getEvent(request.name);
+            for(String accountName: accountNames)
+            {
+                Accounts account = accountsService.getAccount(accountName);
+                Invites invite = new Invites(account, event);
+
+                event.getInvites().add(invite);
+                account.getInvites().add(invite);
+
+                accountsService.editAccount(account);
+                event = calendarService.editEvent(event);
+                invitesService.addNewInvites(invite);
+            }
+        }
+        catch (Exception e){
+            request.success = "false";
+        }
+    }
+
+    @RequestMapping(value = "/auth/invite", method = RequestMethod.DELETE, headers = "Accept=application/json")
+    public @ResponseBody
+    void deleteInvite(@RequestBody EventConfirmation request) throws ServletException, IOException{
+        try {
+            Calendar event = calendarService.getEvent(request.name);
+            Accounts account = accountsService.getAccount(request.invites.get(0));
+            invitesService.deleteInvite(invitesService.getInvite(account, event));
+        }
+        catch (Exception e){
+            request.success = "false";
         }
     }
 }

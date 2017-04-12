@@ -2,7 +2,8 @@ package com.calendar.server.databaseconnector.entity;
 
 import org.hibernate.annotations.GenericGenerator;
 import javax.persistence.*;
-import java.sql.Date;
+import java.util.Date;
+import java.util.List;
 
 import static javax.persistence.CascadeType.REFRESH;
 import static javax.persistence.CascadeType.DETACH;
@@ -25,6 +26,9 @@ public class Calendar {
     @JoinColumn(name = "account_creator", nullable = false)
     private Accounts account_creator;
 
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "event_id")
+    private List<Invites> invites;
+
     @Column(name = "name", nullable = false)
     private String name;
 
@@ -32,9 +36,11 @@ public class Calendar {
     private String description;
 
     @Column(name = "begin_data", nullable = false)
+    @Temporal(TemporalType.TIMESTAMP)
     private Date begin_data;
 
     @Column(name = "end_data", nullable = false)
+    @Temporal(TemporalType.TIMESTAMP)
     private Date end_data;
 
     public Calendar()
@@ -47,6 +53,14 @@ public class Calendar {
         this.begin_data = begin_data;
         this.end_data = end_data;
         this.account_creator = account_creator;
+    }
+
+    public List<Invites> getInvites() {
+        return invites;
+    }
+
+    public void setInvites(List<Invites> invites) {
+        this.invites = invites;
     }
 
     public Integer getId() {

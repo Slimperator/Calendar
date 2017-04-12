@@ -6,7 +6,7 @@ import com.calendar.server.databaseconnector.repository.CalendarRepository;
 import com.calendar.server.databaseconnector.service.CalendarService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import java.sql.Date;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -18,8 +18,8 @@ public class CalendarServiceImpl implements CalendarService {
     private CalendarRepository calendarRepository;
 
     @Override
-    public void deleteEvent(Calendar calendar, String accountName) {
-        calendarRepository.deleteEvent(calendar.getName(), accountName);
+    public void deleteEvent(Calendar calendar, Accounts account) {
+        calendarRepository.deleteEvent(calendar.getName(), account);
         calendarRepository.flush();
     }
 

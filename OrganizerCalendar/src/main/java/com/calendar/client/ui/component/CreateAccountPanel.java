@@ -20,7 +20,7 @@ public class CreateAccountPanel {
 
     public CreateAccountPanel(){
         accountPanel = new FormPanel();
-
+        accountPanel.setStyleName("centerPanelStyle");
         // Create a panel to hold all of the form widgets.
         FlowPanel panel = new FlowPanel();
         accountPanel.setWidget(panel);
@@ -30,6 +30,12 @@ public class CreateAccountPanel {
         PasswordTextBox passwordTextBox = new PasswordTextBox();
         Label loginLabel = new Label();
         Label passwordLabel = new Label();
+
+        loginLabel.setStyleName("labelStyle");
+        passwordLabel.setStyleName("labelStyle");
+
+        loginTextBox.setStyleName("textBoxStyle");
+        passwordTextBox.setStyleName("textBoxStyle");
 
         loginLabel.setText("Login:");
         passwordLabel.setText("Password:");
@@ -44,30 +50,13 @@ public class CreateAccountPanel {
         panel.add(passwordLabel);
         panel.add(passwordTextBox);
 
-        // Add a 'submit' button.
-        panel.add(new Button("Submit", new ClickHandler() {
+        Button button = new Button("Submit", new ClickHandler() {
             public void onClick(ClickEvent event) {
-                accountPanel.submit();
-            }
-        }));
-        // Add an event handler to the form.
-        accountPanel.addSubmitHandler(new FormPanel.SubmitHandler() {
-            public void onSubmit(FormPanel.SubmitEvent event) {
-                // This event is fired just before the form is submitted. We can take
-                // this opportunity to perform validation.
                 if (loginTextBox.getText().length() == 0 ||
                         passwordTextBox.getText().length() == 0) {
                     Window.alert("The filds must not be empty");
-                    event.cancel();
+                    return;
                 }
-            }
-        });
-        accountPanel.addSubmitCompleteHandler(new FormPanel.SubmitCompleteHandler() {
-            public void onSubmitComplete(FormPanel.SubmitCompleteEvent event) {
-                // When the form submission is successfully completed, this event is
-                // fired. Assuming the service returned a response of type text/html,
-                // we can get the result text here (see the FormPanel documentation for
-                // further explanation).
                 AccountConfirmation ac = new AccountConfirmation();
                 ac.login = loginTextBox.getText();
                 ac.newPassword = passwordTextBox.getText();
@@ -84,7 +73,10 @@ public class CreateAccountPanel {
                 });
             }
         });
+        button.setStyleName("menuButtonStyle");
 
+        // Add a 'submit' button.
+        panel.add(button);
     }
 
     public FormPanel getAccountPanel() {

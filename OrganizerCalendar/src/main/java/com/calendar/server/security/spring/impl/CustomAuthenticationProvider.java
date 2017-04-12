@@ -30,8 +30,10 @@ public class CustomAuthenticationProvider implements AuthenticationProvider {
         UserDetails store = userDetailsService.loadUserByUsername(username);
         if (!store.getPassword().equals(password))
             throw new BadCredentialsException("invalid password");
+
+        //store.getAuthorities();
         Authentication customAuthentication = new UsernamePasswordAuthenticationToken(username, password, store.getAuthorities());
-        customAuthentication.setAuthenticated(true);
+       //customAuthentication.setAuthenticated(true);
         return customAuthentication;
     }
 

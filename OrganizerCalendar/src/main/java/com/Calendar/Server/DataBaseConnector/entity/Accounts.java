@@ -28,6 +28,9 @@ public class Accounts {
     @OneToMany(fetch = FetchType.EAGER, mappedBy = "account_creator")
     private List<Calendar> calendar;
 
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "account_invited")
+    private List<Invites> invites;
+
     public List<Calendar> getCalendar() {
         return calendar;
     }
@@ -67,5 +70,13 @@ public class Accounts {
 
     public void setPasswordHash(String passwordHash) {
         this.passwordHash = passwordHash;
+    }
+
+    public List<Invites> getInvites() {
+        return invites;
+    }
+
+    public void setInvites(List<Invites> invites) {
+        this.invites = invites;
     }
 }

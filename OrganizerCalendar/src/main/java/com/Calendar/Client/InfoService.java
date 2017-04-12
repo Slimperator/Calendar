@@ -40,7 +40,7 @@ public interface InfoService extends RestService {
     public void getAccount(MethodCallback<AccountConfirmation> callback);
 
     @POST
-    @Path("/auth/newAccount")
+    @Path("/newAccount")
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
     public void createAccount(AccountConfirmation request, MethodCallback<AccountConfirmation> callback);
@@ -86,4 +86,16 @@ public interface InfoService extends RestService {
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
     public void logout(MethodCallback<String> callback);
+
+    @POST
+    @Path("/auth/invite")
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Produces(MediaType.APPLICATION_JSON)
+    public void createInvite(EventConfirmation request, MethodCallback<Void> callback);
+
+    @DELETE
+    @Path("/auth/invite")
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Produces(MediaType.APPLICATION_JSON)
+    public void deleteInvite(EventConfirmation request, MethodCallback<Void> callback);
 }

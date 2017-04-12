@@ -23,6 +23,7 @@ public class CalendarPanel implements Observer{
     public CalendarPanel()
     {
         calendarFlowPanel = new FlowPanel();
+        calendarFlowPanel.setStyleName("calendarBarStyle");
         calendar = new DatePicker();
         calendar.addValueChangeHandler(new ValueChangeHandler<Date>() {
             public void onValueChange(ValueChangeEvent<Date> event) {

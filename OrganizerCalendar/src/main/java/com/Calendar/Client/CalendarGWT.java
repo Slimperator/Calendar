@@ -51,6 +51,7 @@ public class CalendarGWT implements EntryPoint {
         eventInfoStackPanel = new EventInfoStackPanel();
         menuPanel = new MenuPanel();
         centerFlowPanel = new FlowPanel();
+        centerFlowPanel.setStyleName("centerStyle");
         accountInfo = new AccountInfo();
         createAccountPanel = new CreateAccountPanel();
         //инициализируем буффер
@@ -69,8 +70,8 @@ public class CalendarGWT implements EntryPoint {
         buffer.addObserver(accountInfo);
         //заполняем экран
         DockLayoutPanel mainDockLayoutPanel = new DockLayoutPanel(Style.Unit.EM);
-        mainDockLayoutPanel.addEast(calendarPanel.getCalendarFlowPanel(), 10);
-        mainDockLayoutPanel.addWest(menuPanel.getMenuPanel(), 10);
+        mainDockLayoutPanel.addEast(calendarPanel.getCalendarFlowPanel(), 11);
+        mainDockLayoutPanel.addWest(menuPanel.getMenuPanel(), 11);
         mainDockLayoutPanel.add(centerFlowPanel);
 
         RootLayoutPanel rp = RootLayoutPanel.get();

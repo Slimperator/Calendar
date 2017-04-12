@@ -21,14 +21,14 @@ public class AccountInfo implements Observer{
     public AccountInfo()
     {
         accountInfoForm = new FormPanel();
-
+        accountInfoForm.setStyleName("centerPanelStyle");
         // Create a panel to hold all of the form widgets.
         FlowPanel panel = new FlowPanel();
         accountInfoForm.setWidget(panel);
 
         Button getInfoButton = new Button("Get Info");
+        getInfoButton.setStyleName("menuButtonStyle");
         getInfoButton.getElement().getStyle().setDisplay(Style.Display.BLOCK);
-        getInfoButton.setSize("300","100");
 
         getInfoButton.addClickHandler(new ClickHandler() {
             @Override
@@ -52,6 +52,9 @@ public class AccountInfo implements Observer{
 
         nameLabel.setText("Account name:");
         aboutLabel.setText("");
+
+        nameLabel.setStyleName("labelStyle");
+        aboutLabel.setStyleName("labelStyle");
 
         nameLabel.getElement().getStyle().setDisplay(Style.Display.BLOCK);
         aboutLabel.getElement().getStyle().setDisplay(Style.Display.BLOCK);
