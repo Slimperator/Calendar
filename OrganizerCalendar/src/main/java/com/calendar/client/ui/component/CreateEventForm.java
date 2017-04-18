@@ -6,6 +6,7 @@ import com.google.gwt.core.client.GWT;
 import com.google.gwt.dom.client.Style;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
+import com.google.gwt.i18n.client.DateTimeFormat;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.*;
 import com.google.gwt.user.datepicker.client.DateBox;
@@ -58,6 +59,10 @@ public class CreateEventForm {
         dateEndDateBox.getElement().getStyle().setDisplay(Style.Display.BLOCK);
         dateEndLabel.getElement().getStyle().setDisplay(Style.Display.BLOCK);
         descriptionLabel.getElement().getStyle().setDisplay(Style.Display.BLOCK);
+
+        DateTimeFormat dateFormat = DateTimeFormat.getFormat("yyyy-MM-dd HH:mm");
+        dateBeginDateBox.setFormat(new DateBox.DefaultFormat(dateFormat));
+        dateEndDateBox.setFormat(new DateBox.DefaultFormat(dateFormat));
 
         panel.add(nameLabel);
         panel.add(nameTextBox);

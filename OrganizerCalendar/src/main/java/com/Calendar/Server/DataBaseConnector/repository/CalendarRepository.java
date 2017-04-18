@@ -17,7 +17,8 @@ public interface CalendarRepository extends JpaRepository<Calendar, Integer>{
     @Query("select a from Calendar a where a.name = :name")
     Calendar findeByEventName(@Param("name")String eventName);
 
-    @Query("select a from Calendar a where a.account_creator =:account and a.begin_data between :begin and :endd")
+    @Query("select a from Calendar a where a.account_creator =:account and " +
+            "((a.begin_data >= :begin and a.begin_data <= :endd) OR (a.end_data >= :begin and a.end_data <= :endd))")
     List<Calendar> findeByDateRange(@Param("begin") Date begin,
                                     @Param("endd") Date end,
                                     @Param("account") Accounts account);

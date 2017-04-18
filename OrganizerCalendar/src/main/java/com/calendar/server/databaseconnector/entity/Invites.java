@@ -1,6 +1,8 @@
 package com.calendar.server.databaseconnector.entity;
 
 import org.hibernate.annotations.GenericGenerator;
+import org.hibernate.annotations.LazyCollection;
+import org.hibernate.annotations.LazyCollectionOption;
 
 import javax.persistence.*;
 import java.sql.Date;
@@ -19,11 +21,13 @@ public class Invites {
     @Column(name = "id", nullable = false, unique = true)
     private Integer id;
 
-    @ManyToOne(fetch = FetchType.EAGER, cascade = {MERGE, REMOVE, REFRESH, DETACH})
+    @ManyToOne(cascade = {MERGE, REMOVE, REFRESH, DETACH})
+    @LazyCollection(LazyCollectionOption.FALSE)
     @JoinColumn(name = "event_id", nullable = false)
     private Calendar event_id;
 
-    @ManyToOne(fetch = FetchType.EAGER, cascade = {MERGE, REMOVE, REFRESH, DETACH})
+    @ManyToOne(cascade = {MERGE, REMOVE, REFRESH, DETACH})
+    @LazyCollection(LazyCollectionOption.FALSE)
     @JoinColumn(name = "account_invited", nullable = false)
     private Accounts account_invited;
 

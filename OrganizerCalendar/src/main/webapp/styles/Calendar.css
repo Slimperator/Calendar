@@ -36,6 +36,13 @@ body {
     background-color: #cccccc;
     border-right: 4px solid;
     border-right-color: #79a0c1;
+    height: inherit;
+    width: inherit;
+    position: inherit;
+    left: inherit;
+    right: inherit;
+    top: inherit;
+    bottom: inherit;
 }
 
 .calendarBarStyle {

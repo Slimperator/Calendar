@@ -9,11 +9,14 @@ import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.event.logical.shared.SelectionEvent;
 import com.google.gwt.event.logical.shared.SelectionHandler;
+import com.google.gwt.i18n.client.DateTimeFormat;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.*;
 import org.fusesource.restygwt.client.Method;
 import org.fusesource.restygwt.client.MethodCallback;
 
+import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -22,7 +25,7 @@ import java.util.List;
 public class EventInfoStackPanel implements Observer{
     private StackLayoutPanel eventsStackLayoutPanel = null;
     private String currentEventName = "";
-
+    private Date showedDate = null;
 
     public EventInfoStackPanel()
     {
@@ -39,15 +42,14 @@ public class EventInfoStackPanel implements Observer{
 
     public void updateEventsStackLayoutPanel(List<EventConfirmation> events)
     {
-
-        eventsStackLayoutPanel.clear();
         //Window.alert("Try update event");
+        DateTimeFormat dateFormat = DateTimeFormat.getFormat("yyyy-MM-dd HH:mm");
         for(EventConfirmation event: events)
         {
             VerticalPanel body = new VerticalPanel();
             body.add(new HTML(event.description));
-            body.add(new HTML("Begin date:   " + event.beginDate));
-            body.add(new HTML("End date:     " + event.endDate));
+            body.add(new HTML("Begin date:   " + dateFormat.format(event.beginDate)));
+            body.add(new HTML("End date:     " + dateFormat.format(event.endDate)));
             body.add(new HTML("Creator:      " + event.account));
             body.add(new HTML("Members:"));
             for(String member: event.invites)
@@ -102,6 +104,7 @@ public class EventInfoStackPanel implements Observer{
                 public void onClick(ClickEvent event) {
                     EventConfirmation request = new EventConfirmation();
                     request.name = currentEventName;
+                    request.invites = new ArrayList<>();
                     request.invites.add(inviteTextBox.getText());
                     InfoService.Util.getService().createInvite(request, new MethodCallback<Void>() {
                         @Override
@@ -142,8 +145,34 @@ public class EventInfoStackPanel implements Observer{
     @Override
     public void update() {
         BufferSingletone buffer = BufferSingletone.getBuffer();
-        if(buffer.getEvents() == null || buffer.getEvents().size() == 0)
+
+        if(showedDate == buffer.getChoosenDate())
             return;
-        updateEventsStackLayoutPanel(buffer.getEvents());
+        showedDate = buffer.getChoosenDate();
+
+        EventConfirmation ec = new EventConfirmation();
+        ec.beginDate = showedDate;
+        ec.endDate = new Date(showedDate.getTime() + (1000 * 60 * 60 * 24));
+
+        InfoService.Util.getService().getEventsByRange(ec, new MethodCallback<List<EventConfirmation>>() {
+            @Override
+            public void onFailure(Method method, Throwable throwable) {
+                Window.alert("Error: Can't load events from server");
+                Window.alert(throwable.getMessage());
+            }
+
+            @Override
+            public void onSuccess(Method method, List<EventConfirmation> eventConfirmations) {
+                //Window.alert("All OK");
+                //BufferSingletone.getBuffer().getEvents().clear();
+                buffer.setEvents(eventConfirmations);
+                if(buffer.getEvents() == null)
+                    return;
+                eventsStackLayoutPanel.clear();
+                if(buffer.getEvents().size() != 0) {
+                    updateEventsStackLayoutPanel(buffer.getEvents());
+                }
+            }
+        });
     }
 }

@@ -29,6 +29,7 @@ public class CalendarPanel implements Observer{
             public void onValueChange(ValueChangeEvent<Date> event) {
                 Date date = event.getValue();
                 BufferSingletone.getBuffer().setChoosenDate(date);
+                BufferSingletone.getBuffer().notifyObserver();
             }
         });
         calendar.setValue(new Date(), true);
@@ -61,5 +62,13 @@ public class CalendarPanel implements Observer{
             dates.add(event.beginDate);
         }
         this.updateCalendarFlowPanel(dates);
+    }
+
+    public DatePicker getCalendar() {
+        return calendar;
+    }
+
+    public void setCalendar(DatePicker calendar) {
+        this.calendar = calendar;
     }
 }

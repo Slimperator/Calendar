@@ -1,6 +1,8 @@
 package com.calendar.server.databaseconnector.entity;
 
 import org.hibernate.annotations.GenericGenerator;
+import org.hibernate.annotations.LazyCollection;
+import org.hibernate.annotations.LazyCollectionOption;
 
 import javax.persistence.*;
 import java.util.List;
@@ -28,7 +30,8 @@ public class Accounts {
     @OneToMany(fetch = FetchType.EAGER, mappedBy = "account_creator")
     private List<Calendar> calendar;
 
-    @OneToMany(fetch = FetchType.LAZY, mappedBy = "account_invited")
+    @OneToMany(mappedBy = "account_invited")
+    @LazyCollection(LazyCollectionOption.FALSE)
     private List<Invites> invites;
 
     public List<Calendar> getCalendar() {

@@ -17,6 +17,7 @@ public class BufferSingletone implements Observable {
     private Date choosenDate = new Date();
     private List<Observer> observers = new ArrayList<>();
     private String accountInfo = "";
+    private boolean isLogin = false;
 
     private BufferSingletone()
     {}
@@ -66,4 +67,11 @@ public class BufferSingletone implements Observable {
         this.accountInfo = accountInfo;
     }
 
+    public boolean isLogin() {
+        return isLogin;
+    }
+
+    public void setLogin(boolean login) {
+        isLogin = login;
+    }
 }

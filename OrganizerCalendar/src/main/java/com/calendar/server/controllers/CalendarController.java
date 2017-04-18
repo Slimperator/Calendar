@@ -12,6 +12,7 @@ import com.calendar.server.databaseconnector.service.InvitesService;
 import com.calendar.server.databaseconnector.service.impl.AccountsServiceImpl;
 import com.calendar.server.databaseconnector.service.impl.CalendarServiceImpl;
 import com.calendar.server.security.spring.impl.UserDetailsServiceImpl;
+import com.calendar.server.sorts.CalendarDataTimeSort;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -27,10 +28,8 @@ import javax.ws.rs.PathParam;
 import java.awt.*;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Date;
+import java.util.*;
 import java.util.List;
-import java.util.Locale;
 
 /**
  * Created by Владимир on 05.02.2017.
@@ -176,9 +175,19 @@ public class CalendarController {
         List<EventConfirmation> response = new ArrayList<EventConfirmation>();
         try {
             SimpleDateFormat df = new SimpleDateFormat("EEE MMM dd HH:mm:ss Z yyyy", new Locale("ru"));
+            Accounts thisAccount = accountsService.getAccount(SecurityContextHolder.getContext().getAuthentication().getName());
             List<Calendar> events = calendarService.getEventsByRange(confirmation.beginDate,
                     confirmation.endDate,
-                    accountsService.getAccount(SecurityContextHolder.getContext().getAuthentication().getName()));
+                    thisAccount);
+            List<Calendar> inviteEvents = invitesService.getAllInvitesForThisAccount(thisAccount);
+            for(Calendar event: inviteEvents)
+                if((event.getBegin_data().getTime()>=confirmation.beginDate.getTime()
+                        & event.getBegin_data().getTime()<=confirmation.endDate.getTime())
+                        ||
+                        (event.getEnd_data().getTime()>=confirmation.beginDate.getTime()
+                                & event.getEnd_data().getTime()<=confirmation.endDate.getTime()))
+                    events.add(event);
+            Collections.sort(events, new CalendarDataTimeSort());
             for(Calendar event: events)
             {
                 EventConfirmation element = new EventConfirmation();
@@ -186,7 +195,7 @@ public class CalendarController {
                 element.beginDate = event.getBegin_data();
                 element.endDate = event.getEnd_data();
                 element.name = event.getName();
-                element.account = SecurityContextHolder.getContext().getAuthentication().getName();
+                element.account = event.getAccount_creator().getAccount();
                 List<Accounts> invs = invitesService.getAllInvites(event);
                 element.invites = new ArrayList<>();
                 for(Accounts acs: invs)
@@ -248,15 +257,8 @@ public class CalendarController {
 
     @RequestMapping(value = "/logout", method = RequestMethod.POST, headers = "Accept=application/json")
     public @ResponseBody
-    String authorisationOn(@RequestBody LoginConfirmation lg) throws ServletException, IOException {
-        Authentication authentication = SecurityContextHolder.getContext()
-                .getAuthentication();
-        if (authentication == null) {
-            System.out.println("Not logged in");
-            return null;
-        } else {
-            return (String) authentication.getPrincipal();
-        }
+    void logout() throws ServletException, IOException {
+        SecurityContextHolder.getContext().getAuthentication().setAuthenticated(false);
     }
 
     @RequestMapping(value = "/auth/invite", method = RequestMethod.POST, headers = "Accept=application/json")
@@ -265,16 +267,23 @@ public class CalendarController {
         List<String> accountNames = request.invites;
         try {
             Calendar event = calendarService.getEvent(request.name);
+            String inviter = SecurityContextHolder.getContext().getAuthentication().getName();
             for(String accountName: accountNames)
             {
+                //Если участник хочет пригласить сам себя
+                if(accountName == inviter)
+                    continue;
                 Accounts account = accountsService.getAccount(accountName);
+                //Если пытаемся повторно добавить один и тот же аккаунт
+                if(invitesService.getInvite(account, event)!=null)
+                    continue;
                 Invites invite = new Invites(account, event);
 
                 event.getInvites().add(invite);
                 account.getInvites().add(invite);
 
-                accountsService.editAccount(account);
                 event = calendarService.editEvent(event);
+                accountsService.editAccount(account);
                 invitesService.addNewInvites(invite);
             }
         }

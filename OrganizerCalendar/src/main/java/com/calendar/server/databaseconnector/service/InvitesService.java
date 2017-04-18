@@ -11,6 +11,7 @@ import java.util.List;
  */
 public interface InvitesService {
     List<Accounts> getAllInvites(Calendar event);
+    List<Calendar> getAllInvitesForThisAccount(Accounts account);
     Invites addNewInvites(Invites invite);
     Invites getInvite(Accounts account, Calendar event);
     void deleteInvite(Invites invite);

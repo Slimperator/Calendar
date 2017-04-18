@@ -42,4 +42,13 @@ public class InvitesServiceImpl implements InvitesService{
     public void deleteInvite(Invites invite) {
         invitesRepository.delete(invite);
     }
+
+    @Override
+    public List<Calendar> getAllInvitesForThisAccount(Accounts account) {
+        List<Invites> list = invitesRepository.findeByAccount(account);
+        List<Calendar> result = new ArrayList<>();
+        for(Invites invites: list)
+            result.add(invites.getEvent_id());
+        return result;
+    }
 }
