@@ -29,6 +29,7 @@ body {
     letter-spacing: 1px;
     transition: all 0.3s ease-out;
     font-weight: 600;
+    font-family: "Calibri Light", sans-serif;
 }
 
 .menuStyle {
@@ -43,6 +44,7 @@ body {
     right: inherit;
     top: inherit;
     bottom: inherit;
+    font-family: "Calibri Light", sans-serif;
 }
 
 .calendarBarStyle {
@@ -50,6 +52,7 @@ body {
     background-color: #cccccc;
     border-left: 4px solid;
     border-left-color: #79a0c1;
+    font-family: "Calibri Light", sans-serif;
 }
 
 .centerStyle {
@@ -64,6 +67,7 @@ body {
     align-items: center;
     justify-content: center;
     overflow: auto;
+    font-family: "Calibri Light", sans-serif;
 }
 
 .centerPanelStyle {
@@ -80,6 +84,7 @@ body {
     font-weight: 300;
     font-size: large;
     position: relative;
+    font-family: "Calibri Light", sans-serif;
 }
 
 .textBoxStyle {
@@ -94,6 +99,7 @@ body {
     width: 350px;
     height: 25px;
     font-size: large;
+    font-family: "Calibri Light", sans-serif;
 }
 
 .labelStyle {
@@ -103,11 +109,40 @@ body {
     margin-left: auto;
     margin-right: auto;
     width: 175px;
+    font-family: "Calibri Light", sans-serif;
+}
+
+.dataBoxStyle {
+    text-align: center;
+    border: none;
+    background: rgba(255, 255, 255, 0.7);
+    size: 55px 350px;
+    margin-top:10px;
+    margin-bottom:0px;
+    margin-left: 5px;
+    margin-right: 5px;
+    width: 140px;
+    height: 25px;
+    font-size: large;
+    font-family: "Calibri Light", sans-serif;
+    display: inline;
+}
+
+.dataBoxLabelStyle {
+    text-align: center;
+    background: rgba(255, 255, 255, 0.7);
+    margin-top:0px;
+    margin-bottom:0px;
+    width: 140px;
+    font-family: "Calibri Light", sans-serif;
+    margin-left: 5px;
+    margin-right: 5px;
+    display: inline-block;
 }
 
 .descriptionTextBoxStyle {
     width: 350px;
-    height: 100px;
+    height: 95px;
     text-align: left;
     border: none;
     margin-left: auto;
@@ -116,6 +151,7 @@ body {
     background: rgba(255, 255, 255, 0.7);
     box-sizing: border-box;
     resize: none;
+    font-family: "Calibri Light", sans-serif;
 }
 
 .stackPanelButton {
@@ -127,4 +163,5 @@ body {
     font-weight: 600;
     margin-right:auto;
     margin-left:auto;
+    font-family: "Calibri Light", sans-serif;
 }

@@ -13,6 +13,9 @@ import com.google.gwt.user.datepicker.client.DateBox;
 import org.fusesource.restygwt.client.Method;
 import org.fusesource.restygwt.client.MethodCallback;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+
 /**
  * Created by Владимир on 20.03.2017.
  */
@@ -24,52 +27,64 @@ public class CreateEventForm {
         eventForm.setStyleName("centerPanelStyle");
         // Create a panel to hold all of the form widgets.
         FlowPanel panel = new FlowPanel();
+        FlowPanel labelDate = new FlowPanel();
+        FlowPanel boxDate = new FlowPanel();
         eventForm.setWidget(panel);
 
         // Create a TextBox, giving it a name so that it will be submitted.
         TextBox nameTextBox = new TextBox();
         DateBox dateBeginDateBox = new DateBox();
-        TextBox descriptionTextBox = new TextBox();
+        TextArea descriptionTextBox = new TextArea();
+        TextBox invitesTextBox = new TextBox();
         DateBox dateEndDateBox = new DateBox();
         Label nameLabel = new Label();
         Label dateBeginLabel = new Label();
         Label descriptionLabel = new Label();
         Label dateEndLabel = new Label();
+        Label invitesLabel = new Label();
 
         nameLabel.setStyleName("labelStyle");
-        dateBeginLabel.setStyleName("labelStyle");
-        dateEndLabel.setStyleName("labelStyle");
+        dateBeginLabel.setStyleName("dataBoxLabelStyle");
+        dateEndLabel.setStyleName("dataBoxLabelStyle");
         descriptionLabel.setStyleName("labelStyle");
+        invitesLabel.setStyleName("labelStyle");
 
         nameTextBox.setStyleName("textBoxStyle");
-        dateBeginDateBox.setStyleName("textBoxStyle");
-        dateEndDateBox.setStyleName("textBoxStyle");
+        invitesTextBox.setStyleName("textBoxStyle");
+        dateBeginDateBox.setStyleName("dataBoxStyle");
+        dateEndDateBox.setStyleName("dataBoxStyle");
         descriptionTextBox.setStyleName("descriptionTextBoxStyle");
 
         nameLabel.setText("Event Name:");
         dateBeginLabel.setText("Begin in:");
         dateEndLabel.setText("End in:");
         descriptionLabel.setText("Description:");
+        invitesLabel.setText("Invite somebody:");
 
         nameLabel.getElement().getStyle().setDisplay(Style.Display.BLOCK);
         descriptionTextBox.getElement().getStyle().setDisplay(Style.Display.BLOCK);
         nameTextBox.getElement().getStyle().setDisplay(Style.Display.BLOCK);
-        dateBeginDateBox.getElement().getStyle().setDisplay(Style.Display.BLOCK);
-        dateBeginLabel.getElement().getStyle().setDisplay(Style.Display.BLOCK);
-        dateEndDateBox.getElement().getStyle().setDisplay(Style.Display.BLOCK);
-        dateEndLabel.getElement().getStyle().setDisplay(Style.Display.BLOCK);
+        invitesTextBox.getElement().getStyle().setDisplay(Style.Display.BLOCK);
+        invitesLabel.getElement().getStyle().setDisplay(Style.Display.BLOCK);
+        labelDate.getElement().getStyle().setDisplay(Style.Display.BLOCK);
+        boxDate.getElement().getStyle().setDisplay(Style.Display.BLOCK);
         descriptionLabel.getElement().getStyle().setDisplay(Style.Display.BLOCK);
 
         DateTimeFormat dateFormat = DateTimeFormat.getFormat("yyyy-MM-dd HH:mm");
         dateBeginDateBox.setFormat(new DateBox.DefaultFormat(dateFormat));
         dateEndDateBox.setFormat(new DateBox.DefaultFormat(dateFormat));
 
+        labelDate.add(dateBeginLabel);
+        labelDate.add(dateEndLabel);
+        boxDate.add(dateBeginDateBox);
+        boxDate.add(dateEndDateBox);
+
         panel.add(nameLabel);
         panel.add(nameTextBox);
-        panel.add(dateBeginLabel);
-        panel.add(dateBeginDateBox);
-        panel.add(dateEndLabel);
-        panel.add(dateEndDateBox);
+        panel.add(labelDate);
+        panel.add(boxDate);
+        panel.add(invitesLabel);
+        panel.add(invitesTextBox);
         panel.add(descriptionLabel);
         panel.add(descriptionTextBox);
 
@@ -98,6 +113,7 @@ public class CreateEventForm {
                 //GWT.log("Create DATE objects");
                 ec.beginDate = dateBeginDateBox.getValue();
                 ec.endDate = dateEndDateBox.getValue();
+                ec.invites = new ArrayList<>(Arrays.asList(invitesTextBox.getText().split(" ")));
                 //GWT.log("Try connect with server");
                 InfoService.Util.getService().createEvent(ec, new MethodCallback<EventConfirmation>() {
                     @Override

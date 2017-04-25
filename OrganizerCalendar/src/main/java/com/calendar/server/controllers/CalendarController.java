@@ -135,6 +135,27 @@ public class CalendarController {
             account.getCalendar().add(newEvent);
             accountsService.editAccount(account);
             calendarService.addEvent(newEvent);
+            for(String accountName: confirmation.invites)
+            {
+                //Если участник хочет пригласить сам себя
+                if(accountName == account.getAccount())
+                    continue;
+                Accounts accountInvite = accountsService.getAccount(accountName);
+                //если ничего не нашли
+                if(accountInvite == null)
+                    continue;
+                //Если пытаемся повторно добавить один и тот же аккаунт
+                if(invitesService.getInvite(accountInvite, newEvent)!=null)
+                    continue;
+                Invites invite = new Invites(accountInvite, newEvent);
+
+                newEvent.getInvites().add(invite);
+                account.getInvites().add(invite);
+
+                newEvent = calendarService.editEvent(newEvent);
+                accountsService.editAccount(accountInvite);
+                invitesService.addNewInvites(invite);
+            }
             confirmation.success = "ok";
         }
         catch (Exception e){
@@ -274,6 +295,9 @@ public class CalendarController {
                 if(accountName == inviter)
                     continue;
                 Accounts account = accountsService.getAccount(accountName);
+                //если ничего не нашли
+                if(account == null)
+                    continue;
                 //Если пытаемся повторно добавить один и тот же аккаунт
                 if(invitesService.getInvite(account, event)!=null)
                     continue;

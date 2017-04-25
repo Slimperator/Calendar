@@ -16,6 +16,7 @@ import org.fusesource.restygwt.client.Method;
 import org.fusesource.restygwt.client.MethodCallback;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 
@@ -104,8 +105,7 @@ public class EventInfoStackPanel implements Observer{
                 public void onClick(ClickEvent event) {
                     EventConfirmation request = new EventConfirmation();
                     request.name = currentEventName;
-                    request.invites = new ArrayList<>();
-                    request.invites.add(inviteTextBox.getText());
+                    request.invites = new ArrayList<>(Arrays.asList(inviteTextBox.getText().split(" ")));
                     InfoService.Util.getService().createInvite(request, new MethodCallback<Void>() {
                         @Override
                         public void onFailure(Method method, Throwable throwable) {
